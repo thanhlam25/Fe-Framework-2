@@ -4,46 +4,35 @@ import MenuClient from "../../components/clientMenu";
 import ProductItemForm from "../../components/ProductItem";
 import Slideshow from "../../components/clientSlideShow";
 import Footer from "../../components/clientFooter";
+
+// Tạo các component slideshow riêng biệt để tái sử dụng dễ dàng hơn
+const Slideshow1 = () => {
+    const images1 = [
+        "/public/images/banner1.webp",
+        "/public/images/banner1.2.webp",
+        "/public/images/banner1.3.webp"
+    ];
+
+    return (
+        <Slideshow images={images1} autoplayDelay={3000} />
+    );
+};
+
+const Slideshow2 = () => {
+    const images2 = ["/public/images/banner1.4.webp"];
+    return <Slideshow images={images2} slidesPerView={1} />;
+};
+
+const Slideshow3 = () => {
+    const images3 = [
+        "/public/images/banner2.1.webp",
+        "/public/images/banner2.2.webp",
+        "/public/images/banner2.3.webp"
+    ];
+    return <Slideshow images={images3} slidesPerView={2} autoplayDelay={2000} />;
+};
+
 const Home = () => {
-    const Slideshow1 = () => {
-        const images1 = [
-            "/public/images/banner1.webp",
-            "/public/images/banner1.2.webp",
-            "/public/images/banner1.3.webp"
-        ];
-
-        return (
-            <div>
-                <Slideshow images={images1} autoplayDelay={3000} />
-            </div>
-        );
-    };
-
-    const Slideshow2 = () => {
-        const images2 = [
-            "/public/images/banner1.4.webp"
-        ];
-
-        return (
-            <div>
-                <Slideshow images={images2} slidesPerView={1} />
-            </div>
-        );
-    };
-
-    const Slideshow3 = () => {
-        const images3 = [
-            "/public/images/banner2.1.webp",
-            "/public/images/banner2.2.webp",
-            "/public/images/banner2.3.webp"
-        ];
-
-        return (
-            <div>
-                <Slideshow images={images3} slidesPerView={2} autoplayDelay={2000} />
-            </div>
-        );
-    };
     return (
         <>
             <HeaderClient />
@@ -67,7 +56,8 @@ const Home = () => {
                         <p className="pr-6 text-xl underline">IVY moda</p>
                         <p className="pl-6 text-xl text-gray-500">IVY men</p>
                     </div>
-                    <ProductItemForm />
+                    {/* Truyền endpoint cho ProductItemForm */}
+                    <ProductItemForm endpoint="products" />
 
                     <div className="p-3 border border-black text-center w-32 h-12 mx-auto rounded-tl-[25px] rounded-br-[25px] mb-12 hover:bg-black hover:text-white transition-all duration-300 cursor-pointer">
                         Xem tất cả
@@ -79,13 +69,19 @@ const Home = () => {
                         <p className="pr-6 text-xl underline">IVY moda</p>
                         <p className="pl-6 text-xl text-gray-500">IVY men</p>
                     </div>
-                    <ProductItemForm />
+                    {/* Truyền endpoint cho ProductItemForm */}
+                    <ProductItemForm endpoint="products" />
+
                     <div className="p-3 border border-black text-center w-32 h-12 mx-auto rounded-tl-[25px] rounded-br-[25px] mb-12 hover:bg-black hover:text-white transition-all duration-300 cursor-pointer">
                         Xem tất cả
                     </div>
-                    <Slideshow2 />
+                    <img
+                        className="rounded-tl-[80px] rounded-br-[80px]"
+                        src='/public/images/banner1.4.webp'
+                    />
                     <div className="p-4"></div>
                     <Slideshow3 />
+
                 </article>
                 <Footer />
             </div>

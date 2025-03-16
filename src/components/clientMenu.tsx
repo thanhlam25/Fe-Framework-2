@@ -8,9 +8,30 @@ const MenuClient = () => {
     useEffect(() => {
         // Dữ liệu giả cho categories
         const fakeCategories: Category[] = [
-            { _id: "1", name: "Nam" },
-            { _id: "2", name: "Nữ" },
-            { _id: "3", name: "Trẻ Trâu" },
+            {
+                _id: "1", name: "Nam",
+                parentId: null,
+                ancestors: [],
+                level: 0,
+                createdAt: "",
+                updatedAt: ""
+            },
+            {
+                _id: "2", name: "Nữ",
+                parentId: null,
+                ancestors: [],
+                level: 0,
+                createdAt: "",
+                updatedAt: ""
+            },
+            {
+                _id: "3", name: "Trẻ Trâu",
+                parentId: null,
+                ancestors: [],
+                level: 0,
+                createdAt: "",
+                updatedAt: ""
+            },
         ];
 
         // Cập nhật state với dữ liệu giả
