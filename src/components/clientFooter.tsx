@@ -6,15 +6,15 @@ const Footer = () => {
             <div className="grid grid-cols-[1fr_2fr_1fr] gap-12 mt-12 mb-4">
                 <div className="col-span-1">
                     <div className="flex justify-between items-center">
-                        <img src="/public/images/logo.png" alt="Logo" className="w-28 h-auto mr-4" />
-                        <img src="/public/images/dmca.png" alt="DMCA" className="w-15 h-5 mr-4" />
-                        <img src="/public/images/congthuong.png" alt="Cong Thuong" className="w-15 h-8" />
+                        <img src="/images/logo.png" alt="Logo" className="w-28 h-auto mr-4" />
+                        <img src="/images/dmca.png" alt="DMCA" className="w-15 h-5 mr-4" />
+                        <img src="/images/congthuong.png" alt="Cong Thuong" className="w-15 h-8" />
                     </div>
                     <div className="grid grid-cols-5 py-5 items-center">
                         {['ic_fb', 'ic_gg', 'ic_instagram', 'ic_pinterest', 'ic_ytb'].map((icon) => (
                             <img
                                 key={icon}
-                                src={`/public/svg/${icon}.svg`}
+                                src={`/svg/${icon}.svg`}
                                 className="w-6 h-6 mx-auto" // Đảm bảo chiều rộng và chiều cao bằng nhau
                                 alt={icon}
                             />
@@ -70,8 +70,8 @@ const Footer = () => {
                         </div>
                     </div>
                     <div className="text-2xl font-semibold py-4">Download App</div>
-                    <img src="/public/images/appstore.png" className="w-42 h-auto pb-2" alt="Appstore" />
-                    <img src="/public/images/googleplay.png" className="w-42 h-auto pt-2" alt="Google Play" />
+                    <img src="/images/appstore.png" className="w-42 h-auto pb-2" alt="Appstore" />
+                    <img src="/images/googleplay.png" className="w-42 h-auto pt-2" alt="Google Play" />
                 </div>
             </div>
             <hr />

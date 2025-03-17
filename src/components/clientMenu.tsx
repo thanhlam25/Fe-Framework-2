@@ -63,7 +63,7 @@ const MenuClient = () => {
             {/* Thẻ div giữa chứa logo */}
             <div className="flex justify-center items-center">
                 <Link to="/">
-                    <img src="/public/images/logo.png" alt="Logo" className="w-32 h-auto" />
+                    <img src="/images/logo.png" alt="Logo" className="w-32 h-auto" />
                 </Link>
             </div>
 
@@ -72,7 +72,7 @@ const MenuClient = () => {
                 <div className="w-80 h-9 border flex">
                     <div className="flex px-2 gap-4 items-center">
                         <Link to="/search">
-                            <img src="/public/svg/search.svg" alt="" className="w-4 h-auto" />
+                            <img src="/svg/search.svg" alt="" className="w-4 h-auto" />
                         </Link>
                         <input
                             type="text"
@@ -84,13 +84,13 @@ const MenuClient = () => {
                     </div>
                 </div>
                 <Link to="/support" className="ml-4">
-                    <img src="/public/svg/headphone.svg" alt="Headphone" className="w-5 h-auto" />
+                    <img src="/svg/headphone.svg" alt="Headphone" className="w-5 h-auto" />
                 </Link>
                 <Link to="/login" className="ml-4">
-                    <img src="/public/svg/user.svg" alt="User" className="w-5 h-auto" />
+                    <img src="/svg/user.svg" alt="User" className="w-5 h-auto" />
                 </Link>
                 <Link to="/cart" className="ml-4 mr-8">
-                    <img src="/public/svg/cart.svg" alt="Cart" className="w-5 h-auto" />
+                    <img src="/svg/cart.svg" alt="Cart" className="w-5 h-auto" />
                 </Link>
             </div>
         </header>

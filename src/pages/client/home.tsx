@@ -8,9 +8,9 @@ import Footer from "../../components/clientFooter";
 // Tạo các component slideshow riêng biệt để tái sử dụng dễ dàng hơn
 const Slideshow1 = () => {
     const images1 = [
-        "/public/images/banner1.webp",
-        "/public/images/banner1.2.webp",
-        "/public/images/banner1.3.webp"
+        "/images/banner1.webp",
+        "/images/banner1.2.webp",
+        "/images/banner1.3.webp"
     ];
 
     return (
@@ -19,15 +19,15 @@ const Slideshow1 = () => {
 };
 
 const Slideshow2 = () => {
-    const images2 = ["/public/images/banner1.4.webp"];
+    const images2 = ["/images/banner1.4.webp"];
     return <Slideshow images={images2} slidesPerView={1} />;
 };
 
 const Slideshow3 = () => {
     const images3 = [
-        "/public/images/banner2.1.webp",
-        "/public/images/banner2.2.webp",
-        "/public/images/banner2.3.webp"
+        "/images/banner2.1.webp",
+        "/images/banner2.2.webp",
+        "/images/banner2.3.webp"
     ];
     return <Slideshow images={images3} slidesPerView={2} autoplayDelay={2000} />;
 };
@@ -77,7 +77,7 @@ const Home = () => {
                     </div>
                     <img
                         className="rounded-tl-[80px] rounded-br-[80px]"
-                        src='/public/images/banner1.4.webp'
+                        src='/images/banner1.4.webp'
                     />
                     <div className="p-4"></div>
                     <Slideshow3 />
