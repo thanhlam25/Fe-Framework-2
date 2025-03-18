@@ -1,25 +1,26 @@
 import axios from "axios";
 import { IProduct } from "../types/products";
 
-const API_URL = import.meta.env.VITE_API_URL; // Lấy từ .env
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const getProducts = async (endpoint: string): Promise<IProduct[]> => {
     try {
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
         const res = await axios.get<{ docs: IProduct[] }>(`${API_URL}/api/products/${endpoint}`);
-        return res.data.docs || []; // Trả về danh sách sản phẩm
+        return res.data.docs || [];
     } catch (error) {
         console.error("Error fetching products:", error);
-        return []; // Trả về mảng rỗng nếu có lỗi
+        return [];
     }
 };
-// Hàm thêm sản phẩm
+
 export const addProduct = async (product: IProduct) => {
     try {
         const res = await axios.post(`${API_URL}/api/products/products`, product);
         return res.data;
     } catch (error) {
         console.error("Error adding product:", error);
-        throw error; // Throw error for further handling
+        throw error;
     }
 };
 

@@ -3,12 +3,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import '/node_modules/swiper/swiper-bundle.min.css';
 import { Autoplay } from 'swiper/modules';
 
-// Nhận props cho Slideshow
 type SlideshowProps = {
-    images: string[]; // Danh sách hình ảnh
-    spaceBetween?: number; // Khoảng cách giữa các slide
-    slidesPerView?: number; // Số lượng slide hiển thị
-    autoplayDelay?: number; // Thời gian delay khi autoplay
+    images: string[];
+    spaceBetween?: number;
+    slidesPerView?: number;
+    autoplayDelay?: number;
 };
 
 const Slideshow: React.FC<SlideshowProps> = ({

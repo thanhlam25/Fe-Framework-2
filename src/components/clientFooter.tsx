@@ -3,7 +3,8 @@ import React from "react";
 const Footer = () => {
     return (
         <footer className="w-full px-0 mx-0">
-            <div className="grid grid-cols-[1fr_2fr_1fr] gap-12 mt-12 mb-4">
+            <hr className="mt-6" />
+            <div className="grid grid-cols-[1fr_2fr_1fr] gap-12 mt-6 mb-4">
                 <div className="col-span-1">
                     <div className="flex justify-between items-center">
                         <img src="/images/logo.png" alt="Logo" className="w-28 h-auto mr-4" />
