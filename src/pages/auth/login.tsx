@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { login } from "../../services/userService";
 import HeaderClient from "../../layouts/clientHeader";
 import MenuClient from "../../layouts/clientMenu";
-import Footer from "../../components/clientFooter";
+import Footer from "../../layouts/clientFooter";
 import { Login as LoginType } from "../../types/users";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -32,6 +32,8 @@ const Login = () => {
                 user: {
                     id: data?.user?.id ?? "",
                     email: data?.user?.email ?? "",
+                    role: data?.user?.role ?? "",
+
                 },
             });
             toast.success("Đăng nhập thành công!", {

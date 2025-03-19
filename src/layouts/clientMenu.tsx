@@ -4,6 +4,7 @@ import { AuthContext } from "../components/context/auth.context";
 import { Category } from "../types/categories";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../services/userService";
+import { toast } from "react-toastify";
 
 const MenuClient = () => {
     const context = useContext(AuthContext);
@@ -11,7 +12,7 @@ const MenuClient = () => {
         throw new Error("MenuClient phải được sử dụng trong AuthProvider");
     }
     const { auth, setAuth } = context;
-    const isAuthenticated = auth.isAuthenticated;
+    const { isAuthenticated, user } = auth; // Destructure để lấy user
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const timeoutRef = useRef<number | null>(null);
@@ -45,13 +46,19 @@ const MenuClient = () => {
             localStorage.removeItem("token");
             setAuth({
                 isAuthenticated: false,
-                user: { id: "", email: "" },
+                user: { id: "", email: "", role: "" },
             });
-            console.log("Đăng xuất thành công");
+            toast.success("Đăng xuất thành công!", {
+                position: "top-right",
+                autoClose: 2000,
+            });
             navigate("/login");
         },
         onError: (error) => {
-            console.error("Đăng xuất thất bại:", error);
+            toast.error("Đăng xuất thất bại!", {
+                position: "top-right",
+                autoClose: 2000,
+            });
         },
     });
 
@@ -60,7 +67,7 @@ const MenuClient = () => {
     };
 
     return (
-        <header className="grid grid-cols-[1fr_0.3fr_1fr] items-center py-5 bg-white fixed top-0 w-[90%] z-50 shadow-sm r-0">
+        <header className="grid grid-cols-[1fr_0.3fr_1fr] items-center py-5 bg-white fixed top-0 w-[90%] z-50 shadow-sm">
             <div className="flex items-center justify-start">
                 {categories.map((category) => (
                     <div key={category._id} className="relative group">
@@ -93,7 +100,7 @@ const MenuClient = () => {
                 <div className="w-80 h-9 border flex">
                     <div className="flex px-2 gap-4 items-center">
                         <Link to="/search">
-                            <img src="/svg/search.svg" alt="" className="w-4 h-auto" />
+                            <img src="/svg/search.svg" alt="Search" className="w-4 h-auto" />
                         </Link>
                         <input
                             type="text"
@@ -105,7 +112,7 @@ const MenuClient = () => {
                     </div>
                 </div>
                 <Link to="/support" className="ml-4">
-                    <img src="/svg/headphone.svg" alt="Headphone" className="w-5 h-auto" />
+                    <img src="/svg/headphone.svg" alt="Support" className="w-5 h-auto" />
                 </Link>
 
                 <div
@@ -113,18 +120,8 @@ const MenuClient = () => {
                     onMouseEnter={openDropdown}
                     onMouseLeave={closeDropdown}
                 >
-                    {isAuthenticated ? (
-                        <div className="flex items-center">
-                            <img src="/svg/user.svg" alt="User" className="w-5 h-auto" />
-                        </div>
-                    ) : (
-                        <img src="/svg/user.svg" alt="User" className="w-5 h-auto" />
-                    )}
-                    {isAuthenticated && (
-                        <span className="block w-full px-4 py-4 text-sm font-semibold text-gray-800">
-                            {auth.user.email}
-                        </span>
-                    )}
+                    <img src="/svg/user.svg" alt="User" className="w-5 h-auto" />
+
                     {isDropdownOpen && (
                         <div
                             className="absolute right-0 mt-2 w-48 bg-white border shadow-lg rounded-lg z-50"
@@ -133,10 +130,18 @@ const MenuClient = () => {
                         >
                             {isAuthenticated ? (
                                 <>
+                                    <span className="block w-full px-4 py-4 text-sm font-semibold text-gray-800">
+                                        Tài khoản của tôi
+                                    </span>
                                     <hr />
                                     <Link to="/account" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
                                         Thông tin tài khoản
                                     </Link>
+                                    {user.role === "3" && (
+                                        <Link to="/admin" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                                            Quản trị admin
+                                        </Link>
+                                    )}
                                     <Link to="/orders" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
                                         Đơn hàng của tôi
                                     </Link>

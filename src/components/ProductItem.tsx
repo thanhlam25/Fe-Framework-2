@@ -61,7 +61,7 @@ const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
                     : products.map((product: IProduct) => (
                         <SwiperSlide key={product._id} className="relative">
                             <a
-                                href={`?action=product&id=${encodeURIComponent(product._id)}`}
+                                href={`/products/products/${encodeURIComponent(product._id)}`}
                                 className="group relative block w-full"
                             >
                                 <img
@@ -80,7 +80,7 @@ const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
                                     {Array.isArray(product.colors) && product.colors.length > 0 ? (
                                         product.colors.map((color) => (
                                             <a
-                                                href={`?action=product&id=${encodeURIComponent(color._id)}`}
+                                                href={`?action=product&id=${encodeURIComponent(color._id!)}`}
                                                 className="block"
                                                 key={color._id}
                                             >

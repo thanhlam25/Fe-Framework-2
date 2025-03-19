@@ -1,7 +1,7 @@
 import React from "react";
 import HeaderClient from "../../layouts/clientHeader";
 import MenuClient from "../../layouts/clientMenu";
-import Footer from "../../components/clientFooter";
+import Footer from "../../layouts/clientFooter";
 
 const Register = () => {
     return (

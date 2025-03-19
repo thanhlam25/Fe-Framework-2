@@ -22,3 +22,22 @@ export const getProductById = async (id: string): Promise<IProduct | null> => {
     }
 };
 
+export const addProduct = async (formData: FormData) => {
+    try {
+        const res = await axiosInstance.post(`${API_URL}/api/admin/products`, formData);
+        return res.data;
+    } catch (error) {
+        console.error("Error adding product:", error);
+        throw error;
+    }
+};
+
+export const deleteProduct = async (id: string) => {
+    try {
+        const res = await axiosInstance.delete(`${API_URL}/api/admin/products/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        throw error;
+    }
+};

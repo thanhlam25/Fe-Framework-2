@@ -3,7 +3,7 @@ import HeaderClient from "../../layouts/clientHeader";
 import MenuClient from "../../layouts/clientMenu";
 import ProductItemForm from "../../components/ProductItem";
 import Slideshow from "../../components/clientSlideShow";
-import Footer from "../../components/clientFooter";
+import Footer from "../../layouts/clientFooter";
 
 // Tạo các component slideshow riêng biệt để tái sử dụng dễ dàng hơn
 const Slideshow1 = () => {
