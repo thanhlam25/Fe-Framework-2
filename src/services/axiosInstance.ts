@@ -7,21 +7,21 @@ const axiosInstance = axios.create({
     withCredentials: true, // Luôn gửi cookie với request
 });
 
-// Interceptor để tự động refresh token nếu gặp lỗi 401
-axiosInstance.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-        if (error.response?.status === 401) {
-            try {
-                await axios.get(`${API_URL}/api/auth/refresh`, { withCredentials: true });
-                return axiosInstance(error.config); // Thử lại request ban đầu
-            } catch (refreshError) {
-                console.error("Refresh token failed", refreshError);
-                window.location.href = "/login"; // Chuyển về trang login nếu refresh token lỗi
-            }
+// Lấy token từ localStorage (nếu có)
+const getToken = () => localStorage.getItem("token");
+
+// Gắn token vào headers cho mỗi request
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
         }
-        return Promise.reject(error);
-    }
+        console.log("API_URL:", API_URL);  // Kiểm tra giá trị API_URL
+        return config;
+    },
+    (error) => Promise.reject(error)
 );
+
 
 export default axiosInstance;

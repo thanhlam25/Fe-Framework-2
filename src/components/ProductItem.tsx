@@ -107,6 +107,6 @@ const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
             </Swiper>
         </div>
     );
-};
+};  // Kiểm tra giá trị API_URL
 
 export default ProductItemForm;
