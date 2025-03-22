@@ -1,48 +1,36 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCategories, deleteCategory } from "../../services/categoryService"; // Đường dẫn đến file service
-import { Category } from "../../types/categories"; // Đường dẫn đến file types/categories
+import { getCategories, deleteCategory } from "../../services/categoryService";
+import { Category } from "../../types/categories";
 import AdminHeader from "../../layouts/adminHeader";
 import AdminMenu from "../../layouts/adminMenu";
 import CategorySelector from "./CategorySelector";
 import AddCategoryForm from "./addCategory";
 
-// Giả sử API xóa danh mục
-
 const Categories: React.FC = () => {
     const queryClient = useQueryClient();
-
-    // Lấy danh sách danh mục từ API
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["categories"],
         queryFn: getCategories,
     });
-
-    // Mutation để xóa danh mục
     const deleteMutation = useMutation({
         mutationFn: deleteCategory,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["categories"] }); // Làm mới danh sách
+            queryClient.invalidateQueries({ queryKey: ["categories"] });
         },
         onError: (error) => {
             console.error("Lỗi khi xóa danh mục:", error);
         },
     });
-
-    // Xử lý trạng thái tải và lỗi
     if (isLoading) return <div>Đang tải danh mục...</div>;
     if (isError) return <div>Lỗi: {(error as Error).message}</div>;
 
     const categoriesData: Category[] = data?.docs || [];
-
-    // Tìm tên danh mục cha
     const getParentName = (parentId: string | null) => {
         if (!parentId) return "Không có";
         const parent = categoriesData.find((cat) => cat._id === parentId);
         return parent ? parent.name : "Không xác định";
     };
-
-    // Xử lý xóa danh mục
     const handleDelete = (id: string) => {
         if (window.confirm("Bạn có chắc muốn xóa danh mục này?")) {
             deleteMutation.mutate(id);

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useState, Dispatch, SetStateAction, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { info, logout } from "../../services/userService";
-import { AxiosError } from "axios"; // Thêm import AxiosError
+import { AxiosError } from "axios";
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -75,11 +75,7 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
                     role: data.role || ""
                 },
             });
-            console.log(data);
-
         } else if (error) {
-            console.error("Lỗi khi lấy thông tin người dùng:", error);
-            // Ép kiểu error thành AxiosError
             const axiosError = error as AxiosError;
             if (axiosError.response?.status === 401) {
                 handleLogout();

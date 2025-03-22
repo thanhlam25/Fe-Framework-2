@@ -4,26 +4,19 @@ import { getCategories, addCategory } from "../../services/categoryService"; // 
 import { Category } from "../../types/categories"; // Đường dẫn đến file types/categories
 
 const AddCategoryForm: React.FC = () => {
-    // State quản lý form
     const [name, setName] = useState<string>("");
     const [level, setLevel] = useState<number>(1);
-    const [parentLevel1Id, setParentLevel1Id] = useState<string | null>(null); // Danh mục cấp 1 khi chọn cấp 3
-    const [parentId, setParentId] = useState<string | null>(null); // parentId cuối cùng gửi lên server
-
-    // QueryClient để làm mới danh sách sau khi thêm
+    const [parentLevel1Id, setParentLevel1Id] = useState<string | null>(null);
+    const [parentId, setParentId] = useState<string | null>(null);
     const queryClient = useQueryClient();
-
-    // Lấy danh sách danh mục từ API
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["categories"],
         queryFn: getCategories,
     });
-
-    // Mutation để thêm danh mục mới
     const mutation = useMutation({
         mutationFn: addCategory,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["categories"] }); // Làm mới danh sách danh mục
+            queryClient.invalidateQueries({ queryKey: ["categories"] });
             setName("");
             setParentLevel1Id(null);
             setParentId(null);
@@ -33,19 +26,13 @@ const AddCategoryForm: React.FC = () => {
             console.error("Lỗi khi thêm danh mục:", error);
         },
     });
-
-    // Xử lý trạng thái tải và lỗi
     if (isLoading) return <div>Đang tải danh mục...</div>;
     if (isError) return <div>Lỗi: {(error as Error).message}</div>;
-
-    // Lấy danh sách danh mục từ dữ liệu API
     const categoriesData: Category[] = data?.docs || [];
     const level1Categories = categoriesData.filter((cat) => cat.level === 1);
     const level2Categories = parentLevel1Id
         ? categoriesData.filter((cat) => cat.level === 2 && cat.parentId === parentLevel1Id)
         : categoriesData.filter((cat) => cat.level === 2);
-
-    // Xử lý submit form
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!name) {
@@ -66,7 +53,6 @@ const AddCategoryForm: React.FC = () => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
-            {/* Chọn cấp độ danh mục */}
             <div>
                 <label htmlFor="level" className="block text-sm font-medium text-gray-700">
                     Chọn cấp độ danh mục
@@ -86,8 +72,6 @@ const AddCategoryForm: React.FC = () => {
                     <option value={3}>Cấp 3</option>
                 </select>
             </div>
-
-            {/* Chọn danh mục cha cho cấp 2 */}
             {level === 2 && (
                 <div>
                     <label htmlFor="parentLevel1" className="block text-sm font-medium text-gray-700">

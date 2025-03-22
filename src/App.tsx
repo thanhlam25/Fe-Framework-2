@@ -8,6 +8,7 @@ import DetailProduct from './pages/client/detailProduct';
 import Admin from './pages/admin/home';
 import AddProduct from './pages/admin/addProduct';
 import Categories from './pages/admin/Categories';
+import PrivateRoute from './components/PrivateRoute';
 function App() {
 
   const DetailProductWrapper = () => {
@@ -19,12 +20,14 @@ function App() {
   };
   const routes = useRoutes([
     { path: '/', element: <Home /> },
-    { path: '/admin', element: <Admin /> },
-    { path: '/admin/add-product', element: <AddProduct /> },
-    { path: '/admin/categories', element: <Categories /> },
     { path: '/login', element: <Login /> },
     { path: '/register', element: <Register /> },
     { path: '/products/products/:id', element: <DetailProductWrapper /> },
+
+
+    { path: '/admin', element: <PrivateRoute element={<Admin />} /> },
+    { path: '/admin/add-product', element: <PrivateRoute element={<AddProduct />} /> },
+    { path: '/admin/categories', element: <PrivateRoute element={<Categories />} /> },
   ])
   return routes
 }

@@ -8,6 +8,7 @@ import CategorySelector from "./CategorySelector";
 import { addProduct } from "../../services/adminService";
 import { IProduct, IColor, IImages, ISize } from "../../types/products";
 import { AxiosError } from "axios";
+import { Upload } from "antd";
 
 const AddProduct: React.FC = () => {
     const navigate = useNavigate();
@@ -163,7 +164,6 @@ const AddProduct: React.FC = () => {
         images.product.forEach((file) => {
             formData.append("productImages", file);
         });
-
         mutation.mutate(formData);
     };
 
@@ -274,7 +274,7 @@ const AddProduct: React.FC = () => {
                                                 type="button"
                                                 onClick={handleAddColor}
                                                 disabled={productColors.length > 0}
-                                                className={`mt-2 px-4 py-2 ${productColors.length > 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500'
+                                                className={`mt-2 px-4 py-2 ${productColors.length > 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-black'
                                                     } text-white rounded-md`}
                                             >
                                                 Thêm màu
