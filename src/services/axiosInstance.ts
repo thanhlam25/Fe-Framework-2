@@ -6,7 +6,7 @@ const axiosInstance = axios.create({
     baseURL: API_URL,
     withCredentials: true,
 });
-const getToken = () => localStorage.getItem("token");
+
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem("token");
@@ -17,6 +17,5 @@ axiosInstance.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
-
 
 export default axiosInstance;

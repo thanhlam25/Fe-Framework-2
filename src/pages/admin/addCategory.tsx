@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCategories, addCategory } from "../../services/categoryService"; // Đường dẫn đến file service
 import { Category } from "../../types/categories"; // Đường dẫn đến file types/categories
+import { getList } from "../../api/provider";
 
 const AddCategoryForm: React.FC = () => {
     const [name, setName] = useState<string>("");
@@ -9,9 +10,10 @@ const AddCategoryForm: React.FC = () => {
     const [parentLevel1Id, setParentLevel1Id] = useState<string | null>(null);
     const [parentId, setParentId] = useState<string | null>(null);
     const queryClient = useQueryClient();
-    const { data, isLoading, isError, error } = useQuery({
+    const { data, isLoading, error } = useQuery({
         queryKey: ["categories"],
-        queryFn: getCategories,
+        queryFn: async () => getList({ namespace: "categories", endpoint: "categories" }),
+        staleTime: 60 * 1000,
     });
     const mutation = useMutation({
         mutationFn: addCategory,
@@ -27,7 +29,7 @@ const AddCategoryForm: React.FC = () => {
         },
     });
     if (isLoading) return <div>Đang tải danh mục...</div>;
-    if (isError) return <div>Lỗi: {(error as Error).message}</div>;
+    if (error) return <div>Lỗi: {(error as Error).message}</div>;
     const categoriesData: Category[] = data?.docs || [];
     const level1Categories = categoriesData.filter((cat) => cat.level === 1);
     const level2Categories = parentLevel1Id

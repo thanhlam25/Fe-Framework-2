@@ -5,14 +5,14 @@ import axiosInstance from "./axiosInstance";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const login = async (data: Login) => {
-    const res = await axiosInstance.post("/api/auth/login", data);
+    const res = await axiosInstance.post("/auth/login", data);
     return res.data;
 };
 export const logout = async () => {
-    const res = await axiosInstance.post("/api/auth/logout");
+    const res = await axiosInstance.post("/auth/logout");
     return res.data;
 };
 export const info = async () => {
-    const res = await axiosInstance.post("/api/auth/info");
+    const res = await axiosInstance.post("/auth/info");
     return res.data;
 };

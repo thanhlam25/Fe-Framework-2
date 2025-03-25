@@ -5,7 +5,6 @@ import ProductItemForm from "../../components/ProductItem";
 import Slideshow from "../../components/clientSlideShow";
 import Footer from "../../layouts/clientFooter";
 
-// Tạo các component slideshow riêng biệt để tái sử dụng dễ dàng hơn
 const Slideshow1 = () => {
     const images1 = [
         "/images/banner1.webp",
@@ -17,13 +16,7 @@ const Slideshow1 = () => {
         <Slideshow images={images1} autoplayDelay={3000} />
     );
 };
-
 const Slideshow2 = () => {
-    const images2 = ["/images/banner1.4.webp"];
-    return <Slideshow images={images2} slidesPerView={1} />;
-};
-
-const Slideshow3 = () => {
     const images3 = [
         "/images/banner2.1.webp",
         "/images/banner2.2.webp",
@@ -80,7 +73,7 @@ const Home = () => {
                         src='/images/banner1.4.webp'
                     />
                     <div className="p-4"></div>
-                    <Slideshow3 />
+                    <Slideshow2 />
 
                 </article>
                 <Footer />

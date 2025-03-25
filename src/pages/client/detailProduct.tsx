@@ -1,28 +1,61 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import HeaderClient from '../../layouts/clientHeader';
 import MenuClient from '../../layouts/clientMenu';
 import Footer from '../../layouts/clientFooter';
-import { getProductById } from '../../services/productService'; // Điều chỉnh đường dẫn
+
+import { toast } from 'react-toastify';
+import { CartItem } from '../../types/orders';
+import { getById } from '../../api/provider';
 
 const DetailProduct = ({ productId }: { productId: string }) => {
+    const queryClient = useQueryClient();
+
     const { data: product, isLoading, error } = useQuery({
         queryKey: ['product', productId],
-        queryFn: () => getProductById(productId),
+        queryFn: () => getById({ namespace: "products", endpoint: "products", id: productId }),
     });
 
-    const [selectedColor, setSelectedColor] = useState(product?.colors[0]?._id || '');
-    const [selectedSize, setSelectedSize] = useState<string | null>(null); // Sửa kiểu
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('gioi_thieu');
-    const [showAlert, setShowAlert] = useState(false);
+
+    useEffect(() => {
+        if (product) {
+            if (product.colors.length > 0) {
+                setSelectedColor(product.colors[0]._id!);
+            } else {
+                setSelectedColor(null);
+            }
+            const firstAvailableSize = product.sizes.find((size: { stock: number; }) => size.stock > 0);
+            if (firstAvailableSize) {
+                setSelectedSize(firstAvailableSize.size);
+            } else {
+                setSelectedSize(null);
+            }
+        }
+    }, [product]);
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
     };
+    const addProductToCart = async (cartItem: CartItem) => {
+    };
+    const addToCartMutation = useMutation({
+        mutationFn: addProductToCart,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['cart'] }); // Cập nhật giỏ hàng nếu cần
+            toast.success('Thêm vào giỏ hàng thành công');
+        },
+        onError: (error: Error) => {
+            console.error('Lỗi từ server:', error.message);
+            toast.error('Lỗi khi thêm sản phẩm');
+        },
+    });
 
     const handleQuantityChange = (change: number) => {
-        const selectedSizeStock = product?.sizes.find((s) => s.size === selectedSize)?.stock || Infinity;
+        const selectedSizeStock = product?.sizes.find((s: { size: string | null; }) => s.size === selectedSize)?.stock || Infinity;
         setQuantity((prev) => {
             const newQuantity = prev + change;
             if (newQuantity < 1) return 1;
@@ -30,6 +63,9 @@ const DetailProduct = ({ productId }: { productId: string }) => {
             return newQuantity;
         });
     };
+
+    const isOutOfStock = product?.sizes.every((size: { stock: number; }) => size.stock === 0) || false;
+
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading product: {(error as Error).message}</div>;
     if (!product) return <div>Product not found</div>;
@@ -40,6 +76,7 @@ const DetailProduct = ({ productId }: { productId: string }) => {
             <div className="mx-[5%]">
                 <MenuClient />
                 <article className="mt-[98px]">
+                    {/* Breadcrumb */}
                     <div className="flex gap-4 my-4">
                         <div className="text-sm"><a href="?action=home">Trang chủ</a></div>
                         <div className="text-sm">-</div>
@@ -50,6 +87,7 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                     <hr className="mb-8" />
 
                     <div className="grid grid-cols-2">
+                        {/* Product Images */}
                         <div className="w-[100%] flex gap-3">
                             <div id="zoomLayout" className="relative w-[80%] h-[844.5px] overflow-hidden">
                                 <img
@@ -77,32 +115,33 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                             </div>
                         </div>
 
+                        {/* Product Details */}
                         <div className="pl-[30px]">
                             <div className="text-3xl font-[550]">{product.name}</div>
                             <div className="flex items-center gap-4 py-4">
                                 <div className="text-gray-500">SKU: {product.sku}</div>
                                 <div className="flex gap-[2px]">
-                                    <img src="/images/star.png" className="w-4" alt="star" />
-                                    <img src="/images/star.png" className="w-4" alt="star" />
-                                    <img src="/images/star.png" className="w-4" alt="star" />
-                                    <img src="/images/star.png" className="w-4" alt="star" />
-                                    <img src="/images/star.png" className="w-4" alt="star" />
+                                    {Array(5).fill(0).map((_, i) => (
+                                        <img key={i} src="/images/star.png" className="w-4" alt="star" />
+                                    ))}
                                 </div>
                                 <div className="text-gray-500">(0 đánh giá)</div>
                             </div>
                             <div className="text-2xl font-[550]">
                                 {product.price.toLocaleString('vi-VN')}đ
                             </div>
+
+                            {/* Color Selection */}
                             <div className="text-xl font-[550] my-4">
-                                Màu sắc: {product.colors.find((c) => c._id === selectedColor)?.colorName}
+                                Màu sắc: {product.colors.find((c: { _id: string | null; }) => c._id === selectedColor)?.colorName || 'Chưa chọn'}
                             </div>
                             <div className="flex gap-2 py-2">
-                                {product.colors.map((color) => (
+                                {product.colors.map((color: { _id: string | number | bigint | ((prevState: string | null) => string | null) | null | undefined; actualColor: string; }) => (
                                     <div
-                                        key={color._id}
+                                        key={String(color._id)}
                                         className={`rounded-full w-5 h-5 relative flex items-center justify-center ${selectedColor === color._id ? 'border border-gray-300' : ''}`}
                                         style={{ backgroundColor: color.actualColor }}
-                                        onClick={() => setSelectedColor(color._id!)}
+                                        onClick={() => setSelectedColor(String(color._id!))}
                                     >
                                         {selectedColor === color._id && (
                                             <svg
@@ -117,16 +156,15 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                 ))}
                             </div>
 
+                            {/* Size Selection */}
                             <div className="flex gap-4 my-4">
-                                {product.sizes.map((item) => (
+                                {product.sizes.map((item: { _id: React.Key | null | undefined; stock: number; size: number | boolean | React.SetStateAction<string | null> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | undefined; }) => (
                                     <div
                                         key={item._id}
                                         className={`border border-black w-[46px] h-[30px] flex items-center justify-center text-black ${item.stock === 0 ? 'line-through cursor-not-allowed opacity-50 bg-gray-100' : 'cursor-pointer hover:bg-gray-100'} ${selectedSize === item.size ? 'bg-gray-200' : ''}`}
-                                        onClick={() => {
-                                            if (item.stock > 0) setSelectedSize(item.size);
-                                        }}
+                                        onClick={() => item.stock > 0 && setSelectedSize(String(item.size))}
                                     >
-                                        {item.size}
+                                        {String(item.size)}
                                     </div>
                                 ))}
                             </div>
@@ -163,13 +201,35 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                 </div>
                             </div>
 
+                            {/* Action Buttons */}
                             <div className="flex gap-4 mb-20">
                                 <div
-                                    className="bg-black my-4 text-lg font-semibold text-white w-[174px] h-[48px] rounded-tl-[15px] rounded-br-[15px] flex justify-center items-center hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer transition-all duration-300"
+                                    className={`my-4 text-lg font-semibold w-[174px] h-[48px] rounded-tl-[15px] rounded-br-[15px] flex justify-center items-center transition-all duration-300 ${isOutOfStock
+                                        ? 'bg-gray-400 text-white opacity-50 pointer-events-none'
+                                        : 'bg-black text-white hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer'
+                                        }`}
+                                    onClick={() => {
+                                        if (!isOutOfStock && selectedSize) {
+                                            const cartItem: CartItem = {
+                                                id: productId,
+                                                size: selectedSize,
+                                                quantity: quantity,
+                                            };
+                                            addToCartMutation.mutate(cartItem);
+                                        } else if (!selectedSize) {
+                                            toast.error('Vui lòng chọn size!');
+                                        }
+                                    }}
                                 >
-                                    Thêm vào giỏ
+                                    {isOutOfStock ? 'Hết hàng' : 'Thêm vào giỏ'}
                                 </div>
-                                <div className="bg-white my-4 text-lg font-semibold text-black border border-black w-[124px] h-[46px] rounded-tl-[15px] rounded-br-[15px] flex justify-center items-center hover:bg-black hover:text-white transition-all duration-300 cursor-pointer">
+                                <div
+                                    className={`my-4 text-lg font-semibold w-[124px] h-[46px] rounded-tl-[15px] rounded-br-[15px] flex justify-center items-center transition-all duration-300 ${isOutOfStock
+                                        ? 'bg-white text-gray-400 border border-gray-400 opacity-50 pointer-events-none'
+                                        : 'bg-white text-black border border-black hover:bg-black hover:text-white cursor-pointer'
+                                        }`}
+                                    onClick={() => !isOutOfStock && console.log('Buy now clicked')}
+                                >
                                     Mua hàng
                                 </div>
                                 <div className="bg-white my-4 text-lg font-semibold text-black border border-black w-[46px] h-[46px] rounded-tl-[15px] rounded-br-[15px] flex justify-center items-center hover:bg-black hover:text-white transition-all duration-300 group cursor-pointer">
@@ -185,6 +245,7 @@ const DetailProduct = ({ productId }: { productId: string }) => {
 
                             <hr />
 
+                            {/* Tabs */}
                             <div>
                                 <div className="flex gap-6">
                                     <div
@@ -226,48 +287,6 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                             className="rounded-tl-[80px] rounded-br-[80px] my-7"
                             alt="Banner"
                         />
-                    </div>
-
-                    <div
-                        id="alert-3"
-                        className={`flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 ${showAlert ? '' : 'hidden'}`}
-                        role="alert"
-                    >
-                        <svg
-                            className="flex-shrink-0 w-4 h-4"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                        </svg>
-                        <span className="sr-only">Info</span>
-                        <div className="ms-3 text-sm font-medium">
-                            Thêm sản phẩm vào giỏ hàng thành công!
-                        </div>
-                        <button
-                            type="button"
-                            className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
-                            onClick={() => setShowAlert(false)}
-                        >
-                            <span className="sr-only">Close</span>
-                            <svg
-                                className="w-3 h-3"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 14 14"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                />
-                            </svg>
-                        </button>
                     </div>
                 </article>
                 <Footer />
