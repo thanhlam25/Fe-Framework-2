@@ -3,13 +3,18 @@ import { useQuery } from "@tanstack/react-query";
 import { getCategories } from "../../services/categoryService";
 import { Category } from "../../types/categories";
 
+// Định nghĩa interface cho dữ liệu trả về từ API
+interface CategoryResponse {
+    docs: Category[];
+}
+
 // Định nghĩa interface cho props
 interface CategorySelectorProps {
     onChange: (id: string, ancestors: string[]) => void;
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ onChange }) => {
-    const { data, isLoading } = useQuery({
+    const { data, isLoading } = useQuery<CategoryResponse>({
         queryKey: ["categories"],
         queryFn: getCategories,
     });

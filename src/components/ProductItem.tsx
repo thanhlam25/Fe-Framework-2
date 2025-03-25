@@ -67,7 +67,7 @@ const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
                         <SwiperSlide key={product._id} className="relative">
                             <div className="relative">
                                 <Link
-                                    to={`/products/products/${encodeURIComponent(product._id)}`}
+                                    to={`/products/${encodeURIComponent(product._id)}`}
                                     className="group relative block w-full"
                                 >
                                     <img
@@ -133,7 +133,7 @@ const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
                                     </div>
                                 </div>
                                 <Link
-                                    to={`/products/products/${encodeURIComponent(product._id)}`}
+                                    to={`/products/${encodeURIComponent(product._id)}`}
                                     className="text-[15px] block hover:text-red-500"
                                 >
                                     {product.name}

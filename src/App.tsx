@@ -22,7 +22,7 @@ function App() {
     { path: '/', element: <Home /> },
     { path: '/login', element: <Login /> },
     { path: '/register', element: <Register /> },
-    { path: '/products/products/:id', element: <DetailProductWrapper /> },
+    { path: '/products/:id', element: <DetailProductWrapper /> },
 
 
     { path: '/admin', element: <PrivateRoute element={<Admin />} /> },

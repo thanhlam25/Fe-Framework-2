@@ -20,7 +20,7 @@ export const getList = async ({ namespace = "products", endpoint = "products" }:
 };
 export const getById = async ({ namespace = "products", endpoint = "products", id }: ProviderProps) => {
     try {
-        const { data } = await axiosInstance.get(`/${namespace}/${endpoint}/${id}`);
+        const { data } = await axiosInstance.get(`/${namespace}/${id}`);
         return data || [];
     } catch (error) {
         console.error("Error fetching product by ID:", error);

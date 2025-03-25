@@ -18,7 +18,7 @@ const AdminMenu: React.FC<AdminMenuProps> = ({ className }) => {
     ];
 
     return (
-        <aside className={`bg-[#2D2D2D] text-white w-64 h-full p-6 ${className || ''}`}>
+        <aside className={`bg-[#000000] text-white w-64 h-full p-6 ${className || ''}`}>
             <ul className="space-y-4">
                 {menuItems.map((item) => (
                     <li key={item.name}>

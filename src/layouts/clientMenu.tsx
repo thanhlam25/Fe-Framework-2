@@ -12,7 +12,7 @@ const MenuClient = () => {
         throw new Error("MenuClient phải được sử dụng trong AuthProvider");
     }
     const { auth, setAuth } = context;
-    const { isAuthenticated, user } = auth; // Destructure để lấy user
+    const { isAuthenticated, user } = auth;
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const timeoutRef = useRef<number | null>(null);

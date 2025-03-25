@@ -91,6 +91,7 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
             }
         }
     }, [data, error]);
+    console.log(auth);
 
     if (isLoading) {
         return <div>Đang tải thông tin người dùng...</div>;
