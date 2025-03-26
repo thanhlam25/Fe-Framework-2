@@ -10,55 +10,82 @@ interface CategoryResponse {
     docs: Category[];
 }
 
-const CategoryItem: React.FC<{
+interface TableRowProps {
     category: Category;
     categories: Category[];
+    level: number;
     onDelete: (id: string) => void;
-}> = ({ category, categories, onDelete }) => {
+}
+
+const TableRow: React.FC<TableRowProps> = ({ category, categories, level, onDelete }) => {
     const [expanded, setExpanded] = useState(false);
     const children = categories.filter((cat) => cat.parentId === category._id);
 
     return (
-        <li className="mb-2">
-            <div className="flex items-center">
-                <span className="font-semibold">{category.name}</span>
-                {children.length > 0 && (
+        <>
+            <tr className="hover:bg-gray-100">
+                <td className="border px-4 py-2">
+                    <div className="flex items-center" style={{ marginLeft: level * 20 }}>
+                        {children.length > 0 && (
+                            <button
+                                onClick={() => setExpanded(!expanded)}
+                                className="mr-2 bg-gray-200 text-black hover:bg-gray-300 px-2 py-1 rounded"
+                            >
+                                {expanded ? "–" : "+"}
+                            </button>
+                        )}
+                        <span className="font-semibold text-gray-800">{category.name}</span>
+                    </div>
+                </td>
+                <td className="border px-4 py-2 text-center">{category.level}</td>
+                <td className="border px-4 py-2">
+                    {category.parentId
+                        ? categories.find((cat) => cat._id === category.parentId)?.name || "Không xác định"
+                        : "Không có"}
+                </td>
+                <td className="border px-4 py-2 text-center">
+                    {new Date(category.createdAt).toLocaleDateString()}
+                </td>
+                <td className="border px-4 py-2 text-center">
+                    {new Date(category.updatedAt).toLocaleDateString()}
+                </td>
+                <td className="border px-4 py-2">
+
                     <button
-                        className="ml-4 px-2 py-1 bg-black text-white hover:bg-gray-800 rounded"
-                        onClick={() => setExpanded((prev) => !prev)}
+                        className="bg-black text-white hover:bg-gray-800 px-2 py-1 rounded mr-2"
+                        onClick={() => alert(`Chỉnh sửa: ${category.name}`)}
                     >
-                        {expanded ? "Ẩn" : "Xem"}
+                        Sửa
                     </button>
-                )}
-                <button
-                    className="ml-4 px-2 py-1 bg-black text-white hover:bg-gray-800 rounded"
-                    onClick={() => {
-                        if (window.confirm("Bạn có chắc muốn xóa danh mục này?")) {
-                            onDelete(category._id);
-                        }
-                    }}
-                >
-                    Xóa
-                </button>
-            </div>
-            {expanded && children.length > 0 && (
-                <ul className="ml-6 border-l border-gray-300 pl-4 mt-2">
-                    {children.map((child) => (
-                        <CategoryItem
-                            key={child._id}
-                            category={child}
-                            categories={categories}
-                            onDelete={onDelete}
-                        />
-                    ))}
-                </ul>
-            )}
-        </li>
+                    <button
+                        className="bg-black text-white hover:bg-gray-800 px-2 py-1 rounded"
+                        onClick={() => {
+                            if (window.confirm("Bạn có chắc muốn xóa danh mục này?")) {
+                                onDelete(category._id);
+                            }
+                        }}
+                    >
+                        Xóa
+                    </button>
+                </td>
+            </tr>
+            {expanded &&
+                children.map((child) => (
+                    <TableRow
+                        key={child._id}
+                        category={child}
+                        categories={categories}
+                        level={level + 1}
+                        onDelete={onDelete}
+                    />
+                ))}
+        </>
     );
 };
 
 const Categories: React.FC = () => {
     const queryClient = useQueryClient();
+
     const { data, isLoading, isError, error } = useQuery<CategoryResponse>({
         queryKey: ["categories"],
         queryFn: getCategories,
@@ -73,6 +100,8 @@ const Categories: React.FC = () => {
             console.error("Lỗi khi xóa danh mục:", error);
         },
     });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     if (isLoading) return <div>Đang tải danh mục...</div>;
     if (isError) return <div>Lỗi: {(error as Error).message}</div>;
@@ -89,29 +118,74 @@ const Categories: React.FC = () => {
             <AdminHeader />
             <div className="flex flex-1 overflow-hidden">
                 <AdminMenu className="w-64 bg-black p-6" />
-                <main className="flex-1 overflow-auto p-8 bg-white text-black">
+                <main className="flex-1 overflow-auto p-8 bg-white text-gray-900">
                     <div className="flex-1 flex flex-col">
-                        <AddCategoryForm />
-                        <div className="max-w-4xl p-4">
-                            <h2 className="text-2xl font-bold mb-4">Danh mục</h2>
-                            {rootCategories.length > 0 ? (
-                                <ul>
-                                    {rootCategories.map((cat) => (
-                                        <CategoryItem
-                                            key={cat._id}
-                                            category={cat}
-                                            categories={categoriesData}
-                                            onDelete={handleDelete}
-                                        />
-                                    ))}
-                                </ul>
-                            ) : (
-                                <div>Không có danh mục nào</div>
-                            )}
+                        {/* Nút mở popup thêm danh mục */}
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => setIsModalOpen(true)}
+                                className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+                            >
+                                Thêm danh mục
+                            </button>
+                        </div>
+                        <div className="max-w-6xl p-4">
+                            <h2 className="text-2xl font-bold mb-4 text-center">Quản Lý Danh Mục</h2>
+                            <table className="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="border px-4 py-2 text-left">Tên danh mục</th>
+                                        <th className="border px-4 py-2 text-center">Cấp độ</th>
+                                        <th className="border px-4 py-2 text-left">Danh mục cha</th>
+                                        <th className="border px-4 py-2 text-center">Ngày tạo</th>
+                                        <th className="border px-4 py-2 text-center">Ngày cập nhật</th>
+                                        <th className="border px-4 py-2 text-center">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {rootCategories.length > 0 ? (
+                                        rootCategories.map((cat) => (
+                                            <TableRow
+                                                key={cat._id}
+                                                category={cat}
+                                                categories={categoriesData}
+                                                level={0}
+                                                onDelete={handleDelete}
+                                            />
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={6} className="border px-4 py-2 text-center">
+                                                Không có danh mục nào
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </main>
             </div>
+
+            {/* Modal Popup thêm danh mục */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h3 className="text-lg font-semibold">Thêm Danh Mục</h3>
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="text-black hover:text-gray-700 text-2xl leading-none"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                        <div className="p-4">
+                            <AddCategoryForm />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

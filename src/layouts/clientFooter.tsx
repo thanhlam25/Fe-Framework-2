@@ -38,7 +38,7 @@ const Footer = () => {
                         ))}
                     </div>
                     <div>
-                        <p className="bg-black w-68 h-[50px] rounded-tl-2xl rounded-br-2xl flex items-center justify-center lg:text-[20px] md:text-[14px] text-white font-semibold hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer transition-all duration-300">
+                        <p className="bg-black w-68 h-[50px] rounded-tl-2xl rounded-br-2xl flex items-center justify-center lg:text-[16px] md:text-[12px] text-white font-semibold hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer transition-all duration-300">
                             HOTLINE: 0353 608 533
                         </p>
                     </div>
@@ -179,7 +179,7 @@ const Footer = () => {
             {/* Đường phân cách và bản quyền */}
             <hr />
             <div className="flex justify-center items-center h-16">
-                <p>©IVYmoda All rights reserved - Nhóm 1</p>
+                <p>©IVYmoda All rights reserved - Tạ Hoàng Hiệp</p>
             </div>
         </footer>
     );

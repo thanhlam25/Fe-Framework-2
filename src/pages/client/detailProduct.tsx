@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '../../components/context/auth.context';
 import HeaderClient from '../../layouts/clientHeader';
 import MenuClient from '../../layouts/clientMenu';
 import Footer from '../../layouts/clientFooter';
-
 import { toast } from 'react-toastify';
-import { CartItem } from '../../types/orders';
+import { CartItem } from '../../types/cart';
 import { getById } from '../../api/provider';
+import { addToCart } from '../../services/userService';
+import { Rate } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const DetailProduct = ({ productId }: { productId: string }) => {
     const queryClient = useQueryClient();
-
+    const { auth } = useAuth();
+    const navigate = useNavigate();
     const { data: product, isLoading, error } = useQuery({
         queryKey: ['product', productId],
         queryFn: () => getById({ namespace: "products", endpoint: "products", id: productId }),
@@ -40,12 +44,11 @@ const DetailProduct = ({ productId }: { productId: string }) => {
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
     };
-    const addProductToCart = async (cartItem: CartItem) => {
-    };
+
     const addToCartMutation = useMutation({
-        mutationFn: addProductToCart,
+        mutationFn: addToCart,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['cart'] }); // Cập nhật giỏ hàng nếu cần
+            queryClient.invalidateQueries({ queryKey: ['cart'] });
             toast.success('Thêm vào giỏ hàng thành công');
         },
         onError: (error: Error) => {
@@ -76,7 +79,6 @@ const DetailProduct = ({ productId }: { productId: string }) => {
             <div className="mx-[5%]">
                 <MenuClient />
                 <article className="mt-[98px]">
-                    {/* Breadcrumb */}
                     <div className="flex gap-4 my-4">
                         <div className="text-sm"><a href="?action=home">Trang chủ</a></div>
                         <div className="text-sm">-</div>
@@ -87,7 +89,6 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                     <hr className="mb-8" />
 
                     <div className="grid grid-cols-2">
-                        {/* Product Images */}
                         <div className="w-[100%] flex gap-3">
                             <div id="zoomLayout" className="relative w-[80%] h-[844.5px] overflow-hidden">
                                 <img
@@ -114,34 +115,34 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Product Details */}
                         <div className="pl-[30px]">
                             <div className="text-3xl font-[550]">{product.name}</div>
                             <div className="flex items-center gap-4 py-4">
                                 <div className="text-gray-500">SKU: {product.sku}</div>
-                                <div className="flex gap-[2px]">
-                                    {Array(5).fill(0).map((_, i) => (
-                                        <img key={i} src="/images/star.png" className="w-4" alt="star" />
-                                    ))}
+                                <div className="flex items-center gap-1">
+                                    <Rate 
+                                        disabled 
+                                        allowHalf 
+                                        defaultValue={4.5} 
+                                        className="text-yellow-500 flex items-center justify-center [&_.ant-rate-star]:!text-[16px] [&_.ant-rate-star-second]:!text-[16px] [&_.ant-rate-star-half]:!text-[16px] [&_.ant-rate-star-full]:!text-[16px] [&_.ant-rate-star-half-left]:!text-[16px] [&_.ant-rate-star-half-right]:!text-[16px] [&_.ant-rate-star]:!mr-[0px]"
+                                    />
+                                    <div className="text-gray-500">(0 đánh giá)</div>
                                 </div>
-                                <div className="text-gray-500">(0 đánh giá)</div>
                             </div>
                             <div className="text-2xl font-[550]">
                                 {product.price.toLocaleString('vi-VN')}đ
                             </div>
 
-                            {/* Color Selection */}
                             <div className="text-xl font-[550] my-4">
                                 Màu sắc: {product.colors.find((c: { _id: string | null; }) => c._id === selectedColor)?.colorName || 'Chưa chọn'}
                             </div>
                             <div className="flex gap-2 py-2">
-                                {product.colors.map((color: { _id: string | number | bigint | ((prevState: string | null) => string | null) | null | undefined; actualColor: string; }) => (
+                                {product.colors.map((color: { _id: string | number; actualColor: string; }) => (
                                     <div
                                         key={String(color._id)}
                                         className={`rounded-full w-5 h-5 relative flex items-center justify-center ${selectedColor === color._id ? 'border border-gray-300' : ''}`}
                                         style={{ backgroundColor: color.actualColor }}
-                                        onClick={() => setSelectedColor(String(color._id!))}
+                                        onClick={() => setSelectedColor(String(color._id))}
                                     >
                                         {selectedColor === color._id && (
                                             <svg
@@ -155,16 +156,14 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                     </div>
                                 ))}
                             </div>
-
-                            {/* Size Selection */}
                             <div className="flex gap-4 my-4">
-                                {product.sizes.map((item: { _id: React.Key | null | undefined; stock: number; size: number | boolean | React.SetStateAction<string | null> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | undefined; }) => (
+                                {product.sizes.map((item: { _id: React.Key | null; stock: number; size: string; }) => (
                                     <div
                                         key={item._id}
                                         className={`border border-black w-[46px] h-[30px] flex items-center justify-center text-black ${item.stock === 0 ? 'line-through cursor-not-allowed opacity-50 bg-gray-100' : 'cursor-pointer hover:bg-gray-100'} ${selectedSize === item.size ? 'bg-gray-200' : ''}`}
                                         onClick={() => item.stock > 0 && setSelectedSize(String(item.size))}
                                     >
-                                        {String(item.size)}
+                                        {item.size}
                                     </div>
                                 ))}
                             </div>
@@ -175,7 +174,7 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                     viewBox="0 0 512 512"
                                     className="w-3 h-3 text-gray-500"
                                 >
-                                    <path d="M177.9 494.1c-18.7 18.7-49.1 18.7-67.9 0L17.9 401.9c-18.7-18.7-18.7-49.1 0-67.9l50.7-50.7 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 50.7-50.7c18.7-18.7 49.1-18.7 67.9 0l92.1 92.1c18.7 18.7 18.7 49.1 0 67.9L177.9 494.1z" />
+                                    <path d="M177.9 494.1c-18.7 18.7-49.1 18.7-67.9 0L17.9 401.9c-18.7-18.7-18.7-49.1 0-67.9l50.7-50.7 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 50.7-50.7c18.7-18.7 49.1-18.7 67.9 0l92.1 92.1c18.7 18.7 18.7 49.1 0 67.9L177.9 494.1z" />
                                 </svg>
                                 Kiểm tra size của bạn
                             </div>
@@ -200,8 +199,6 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                     </button>
                                 </div>
                             </div>
-
-                            {/* Action Buttons */}
                             <div className="flex gap-4 mb-20">
                                 <div
                                     className={`my-4 text-lg font-semibold w-[174px] h-[48px] rounded-tl-[15px] rounded-br-[15px] flex justify-center items-center transition-all duration-300 ${isOutOfStock
@@ -210,8 +207,13 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                         }`}
                                     onClick={() => {
                                         if (!isOutOfStock && selectedSize) {
+                                            if (!auth.user.id) {
+                                                toast.error('Bạn cần đăng nhập!');
+                                                return;
+                                            }
                                             const cartItem: CartItem = {
-                                                id: productId,
+                                                userId: auth.user.id,
+                                                productId: productId,
                                                 size: selectedSize,
                                                 quantity: quantity,
                                             };
@@ -228,9 +230,27 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                                         ? 'bg-white text-gray-400 border border-gray-400 opacity-50 pointer-events-none'
                                         : 'bg-white text-black border border-black hover:bg-black hover:text-white cursor-pointer'
                                         }`}
-                                    onClick={() => !isOutOfStock && console.log('Buy now clicked')}
+                                        onClick={() => {
+                                            if (!isOutOfStock && selectedSize) {
+                                                if (!auth.user.id) {
+                                                    toast.error('Bạn cần đăng nhập!');
+                                                    return;
+                                                }
+                                                const cartItem: CartItem = {
+                                                    userId: auth.user.id,
+                                                    productId: productId,
+                                                    size: selectedSize,
+                                                    quantity: quantity,
+                                                };
+                                                addToCartMutation.mutate(cartItem);
+                                                navigate('/cart');
+                                            } else if (!selectedSize) {
+                                                toast.error('Vui lòng chọn size!');
+                                            }
+                                        }}
                                 >
-                                    Mua hàng
+                                    {isOutOfStock ? 'Hết hàng' : 'Mua hàng'}
+                                    
                                 </div>
                                 <div className="bg-white my-4 text-lg font-semibold text-black border border-black w-[46px] h-[46px] rounded-tl-[15px] rounded-br-[15px] flex justify-center items-center hover:bg-black hover:text-white transition-all duration-300 group cursor-pointer">
                                     <svg
@@ -244,8 +264,6 @@ const DetailProduct = ({ productId }: { productId: string }) => {
                             </div>
 
                             <hr />
-
-                            {/* Tabs */}
                             <div>
                                 <div className="flex gap-6">
                                     <div

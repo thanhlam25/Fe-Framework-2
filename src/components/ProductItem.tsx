@@ -134,7 +134,7 @@ const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
                                 </div>
                                 <Link
                                     to={`/products/${encodeURIComponent(product._id)}`}
-                                    className="text-[15px] block hover:text-red-500"
+                                    className="text-[15px] block hover:text-orange-600 transition-all duration-300 cursor-pointer"
                                 >
                                     {product.name}
                                 </Link>

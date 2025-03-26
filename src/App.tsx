@@ -9,6 +9,7 @@ import Admin from './pages/admin/home';
 import AddProduct from './pages/admin/addProduct';
 import Categories from './pages/admin/Categories';
 import PrivateRoute from './components/PrivateRoute';
+import Cart from './pages/client/cart';
 function App() {
 
   const DetailProductWrapper = () => {
@@ -23,6 +24,8 @@ function App() {
     { path: '/login', element: <Login /> },
     { path: '/register', element: <Register /> },
     { path: '/products/:id', element: <DetailProductWrapper /> },
+    { path: '/cart', element: <Cart /> },
+
 
 
     { path: '/admin', element: <PrivateRoute element={<Admin />} /> },
