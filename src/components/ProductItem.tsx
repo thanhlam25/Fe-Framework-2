@@ -18,7 +18,7 @@ const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
         staleTime: 60 * 1000,
     });
 
-    const products: IProduct[] = data || [];
+    const products: IProduct[] = data?.docs || [];
 
     const [selectedColors, setSelectedColors] = useState<{ [key: string]: string | null }>({});
     useEffect(() => {
