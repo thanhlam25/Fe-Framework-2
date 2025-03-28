@@ -12,7 +12,16 @@ export type ProviderProps = {
 export const getList = async ({ namespace = "products", endpoint = "products" }: ProviderProps) => {
     try {
         const { data } = await axiosInstance.get(`/${namespace}`);
-        return data?.docs || [];
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        return [];
+    }
+};
+export const getListOne = async ({ namespace = "products", endpoint = "products",id }: ProviderProps) => {
+    try {
+        const { data } = await axiosInstance.get(`/${namespace}/${id}`);
+        return data || [];
     } catch (error) {
         console.error("Error fetching products:", error);
         return [];

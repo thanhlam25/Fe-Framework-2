@@ -10,6 +10,9 @@ import AddProduct from './pages/admin/addProduct';
 import Categories from './pages/admin/Categories';
 import PrivateRoute from './components/PrivateRoute';
 import Cart from './pages/client/cart';
+import ListProduct from './pages/admin/listProducts';
+import ListUser from './pages/admin/listUser';
+import UseDetail from './pages/admin/useDetail';
 function App() {
 
   const DetailProductWrapper = () => {
@@ -29,6 +32,9 @@ function App() {
 
 
     { path: '/admin', element: <PrivateRoute element={<Admin />} /> },
+    { path: '/admin/users', element: <PrivateRoute element={<ListUser />} /> },
+    { path: '/admin/users/:id', element: <PrivateRoute element={<UseDetail />} /> },
+    { path: '/admin/products', element: <PrivateRoute element={<ListProduct />} /> },
     { path: '/admin/add-product', element: <PrivateRoute element={<AddProduct />} /> },
     { path: '/admin/categories', element: <PrivateRoute element={<Categories />} /> },
   ])
