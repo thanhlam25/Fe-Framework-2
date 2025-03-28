@@ -32,11 +32,12 @@ const ListUser = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {users.map((user:any) => (
+                   console.log(user.id),
                   <tr key={user.id} className="hover:bg-gray-50 cursor-pointer">
                     <td className="border border-gray-300 p-2">{user.email}</td>
                     <td className="border border-gray-300 p-2">
-                     <Link to={`${user.id}`}>
+                     <Link to={`${user._id}`}>
                      Xem chi tiết
                      </Link>
                     </td>

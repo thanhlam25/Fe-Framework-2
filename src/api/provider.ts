@@ -27,6 +27,15 @@ export const getListOne = async ({ namespace = "products", endpoint = "products"
         return [];
     }
 };
+export const getUserOne = async ({ namespace = "users", endpoint = "users",id }: ProviderProps) => {
+    try {
+        const { data } = await axiosInstance.get(`/${namespace}/${id}`);
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return [];
+    }
+};
 export const getById = async ({ namespace = "products", endpoint = "products", id }: ProviderProps) => {
     try {
         const { data } = await axiosInstance.get(`/${namespace}/${id}`);

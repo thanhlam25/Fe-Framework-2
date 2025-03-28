@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { getById, getList } from '../../api/provider';
+import { getUserOne } from '../../api/provider';
 import AdminHeader from '../../layouts/adminHeader';
 import AdminMenu from '../../layouts/adminMenu';
 import { useParams } from 'react-router-dom';
@@ -9,12 +9,12 @@ const UseDetail = () => {
   const {id} = useParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ['users',id],
-    queryFn: async () => getById({ namespace: `users`, endpoint: '',id : id }),
+    queryFn: async () => getUserOne({ namespace: `admin/users`, endpoint: '',id : id }),
     staleTime: 60 * 1000,
   });
   console.log(data);
   
-  const users = data || []
+  const users = data 
   console.log(users)
 
   const [useInfo, setUserInfo] = useState({
@@ -60,45 +60,44 @@ const UseDetail = () => {
                 <form className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-600">Họ tên</label>
-                  <input type="text" value={useInfo.first_name} className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-600">Họ và tên đệm</label>
+                  <input disabled type="text" placeholder={useInfo.first_name} className=" mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Tên</label>
-                  <input type="text" value={useInfo.name}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <input disabled  type="text" placeholder={useInfo.name}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Email</label>
-                  <input type="email" value={useInfo.email}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <input disabled type="email" placeholder={useInfo.email}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">SĐT</label>
-                  <input type="text" value={useInfo.phone}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <input disabled type="text" placeholder={useInfo.phone}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-600">Năm sinh</label>
-                  <input type="text" value={useInfo.date}  className="mt-2 w-full p-3 border rounded-lg bg-gray-100" disabled />
+                  <label className="block text-sm font-medium text-gray-600">Ngày sinh</label>
+                  <input disabled type="text" placeholder={useInfo.date}  className="mt-2 w-full p-3 border rounded-lg bg-gray-100"  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Giới tính</label>
-                  <input className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" value={useInfo.sex = 1 ? "Nam" : "Nữ"}>
-                  </input>
+                  <input disabled className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder={useInfo.sex = 1 ? "Nam" : "Nữ"}/>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Thành phố / Tỉnh</label>
-                  <input type="text" value={useInfo.city}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <input disabled type="text" placeholder={useInfo.city}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Quận / Huyện</label>
-                  <input type="text" value={useInfo.district}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <input disabled type="text" placeholder={useInfo.district}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Phường / Xã</label>
-                  <input type="text" value={useInfo.commune}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <input disabled type="text" placeholder={useInfo.commune}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Địa chỉ</label>
-                  <input type="text" value={useInfo.address}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
+                  <input disabled type="text" placeholder={useInfo.address}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
               </div>
               <div className="flex justify-end">
