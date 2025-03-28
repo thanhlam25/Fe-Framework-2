@@ -13,6 +13,7 @@ import Cart from './pages/client/cart';
 import ListProduct from './pages/admin/listProducts';
 import ListUser from './pages/admin/listUser';
 import UseDetail from './pages/admin/useDetail';
+import Dathang from './pages/client/dathang';
 function App() {
 
   const DetailProductWrapper = () => {
@@ -28,7 +29,7 @@ function App() {
     { path: '/register', element: <Register /> },
     { path: '/products/:id', element: <DetailProductWrapper /> },
     { path: '/cart', element: <Cart /> },
-
+    { path: '/dathang', element: <Dathang /> },
 
 
     { path: '/admin', element: <PrivateRoute element={<Admin />} /> },

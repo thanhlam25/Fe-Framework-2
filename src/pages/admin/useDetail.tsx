@@ -56,7 +56,7 @@ const UseDetail = () => {
         <AdminMenu className="w-64 bg-black p-6" />
         <main className="mt-[-20px] flex-grow bg-gray-100 ">
           <div className="bg-white p-8 shadow-lg rounded-lg">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-700">Chỉnh sửa thông tin người dùng</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-700">Thông tin người dùng</h2>
                 <form className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div>
@@ -84,7 +84,7 @@ const UseDetail = () => {
                   <input disabled className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder={useInfo.sex = 1 ? "Nam" : "Nữ"}/>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-600">Thành phố / Tỉnh</label>
+                  <label className="block text-sm font-medium text-gray-600">Tỉnh / Thành phố </label>
                   <input disabled type="text" placeholder={useInfo.city}  className="mt-2 w-full p-3 border rounded-lg focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div>
@@ -101,7 +101,7 @@ const UseDetail = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                <button type="submit" className="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow hover:bg-indigo-700 transition">
+                <button type="submit" className="bg-black text-white px-6 py-3 rounded-lg shadow hover:bg-black/80 transition">
                   <a href="/admin/users">Quay lại</a>
                 </button>
               </div>

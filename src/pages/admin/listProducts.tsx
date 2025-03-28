@@ -6,6 +6,7 @@ import AdminHeader from "../../layouts/adminHeader";
 import AdminMenu from "../../layouts/adminMenu";
 import { message } from "antd";
 import { deleteById, getList } from "../../api/provider";
+import { toast } from "react-toastify";
 
 const ListProduct: React.FC = () => {
     const queryClient = useQueryClient();
@@ -13,20 +14,18 @@ const ListProduct: React.FC = () => {
         queryKey: ["products"],
         queryFn: () => getList({ namespace: "products",endpoint:""}),
     });
-
-    // Lấy mảng products từ data.docs
     const products = data?.docs || [];
 console.log(products);
 
     const deleteMutation = useMutation({
         mutationFn: deleteById,
         onSuccess: () => {
-            message.success("Xóa sản phẩm thành công");
+            toast.success("Xóa sản phẩm thành công");
             queryClient.invalidateQueries({ queryKey: ["products"] });
         },
         onError: (error: Error) => {
             console.error("Lỗi khi xóa danh mục:", error);
-            message.error(error.message || "Xóa sản phẩm thất bại");
+            toast.error(error.message || "Xóa sản phẩm thất bại");
         },
     });
 
@@ -45,12 +44,6 @@ console.log(products);
                 <AdminMenu className="w-64 bg-black p-6" />
                 <div className="flex-1 flex flex-col">
                     <header className="bg-white shadow px-4 py-2 flex justify-between items-center fixed w-full">
-                        <Link
-                            to="/admin/add-product"
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        >
-                            Thêm sản phẩm
-                        </Link>
                     </header>
                     <main className="p-4 flex-grow bg-gray-100 pt-16">
                         <div className="bg-white p-6 shadow rounded">

@@ -56,7 +56,6 @@ const Cart = () => {
 
     console.log('Cart Items:', validItems);
 
-    // Tính toán tổng số lượng và giá trị an toàn
     const totalQuantity = validItems.reduce((sum, item) => {
         if (!item || typeof item.quantity !== 'number') return sum;
         return sum + item.quantity;
@@ -235,9 +234,17 @@ const Cart = () => {
                                 <hr />
                             </div>
                             <div>
-                                <p className={`bg-black w-68 h-[50px] rounded-tl-2xl rounded-br-2xl flex items-center justify-center lg:text-[16px] md:text-[12px] text-white font-semibold ${validItems.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer'} transition-all duration-300`}>
-                                    {validItems.length === 0 ? 'GIỎ HÀNG TRỐNG' : 'ĐẶT HÀNG'}
-                                </p>
+                                {validItems.length === 0 ? (
+                                    <p className="bg-black w-68 h-[50px] rounded-tl-2xl rounded-br-2xl flex items-center justify-center lg:text-[16px] md:text-[12px] text-white font-semibold opacity-50 cursor-not-allowed transition-all duration-300">
+                                        GIỎ HÀNG TRỐNG
+                                    </p>
+                                ) : (
+                                    <Link to="/dathang">
+                                        <p className="bg-black w-68 h-[50px] rounded-tl-2xl rounded-br-2xl flex items-center justify-center lg:text-[16px] md:text-[12px] text-white font-semibold hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer transition-all duration-300">
+                                            ĐẶT HÀNG
+                                        </p>
+                                    </Link>
+                                )}
                             </div>
                            
                         </div>

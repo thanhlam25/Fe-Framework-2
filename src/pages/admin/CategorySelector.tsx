@@ -3,12 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getCategories } from "../../services/categoryService";
 import { Category } from "../../types/categories";
 
-// Định nghĩa interface cho dữ liệu trả về từ API
 interface CategoryResponse {
     docs: Category[];
 }
-
-// Định nghĩa interface cho props
 interface CategorySelectorProps {
     onChange: (id: string, ancestors: string[]) => void;
 }
@@ -32,8 +29,6 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onChange }) => {
     const level3Categories = selectedLevel2
         ? categoriesData.filter((cat) => cat.parentId === selectedLevel2)
         : [];
-
-    // Gọi onChange khi chọn danh mục cấp thấp nhất
     React.useEffect(() => {
         if (selectedLevel3) {
             const selectedCategory = categoriesData.find((cat) => cat._id === selectedLevel3);
