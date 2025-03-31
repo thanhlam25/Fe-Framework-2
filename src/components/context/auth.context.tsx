@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useState, Dispatch, SetStateAction
 import { useQuery } from "@tanstack/react-query";
 import { info, logout } from "../../services/userService";
 import { AxiosError } from "axios";
-
+import Loading from "../loading";
 interface AuthState {
     isAuthenticated: boolean;
     user: {
@@ -94,7 +94,7 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
     console.log(auth);
 
     if (isLoading) {
-        return <div>Đang tải thông tin người dùng...</div>;
+        return <Loading />;
     }
 
     return (

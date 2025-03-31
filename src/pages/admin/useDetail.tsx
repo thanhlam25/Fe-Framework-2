@@ -1,15 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { getUserOne } from '../../api/provider';
+import { getById } from '../../api/provider';
 import AdminHeader from '../../layouts/adminHeader';
 import AdminMenu from '../../layouts/adminMenu';
 import { useParams } from 'react-router-dom';
+import Loading from '../../components/loading';
 
 const UseDetail = () => {
   const {id} = useParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ['users',id],
-    queryFn: async () => getUserOne({ namespace: `admin/users`, endpoint: '',id : id }),
+    queryFn: async () => getById({ namespace: `admin/users`,id : id }),
     staleTime: 60 * 1000,
   });
   console.log(data);
@@ -46,7 +47,7 @@ const UseDetail = () => {
       })
     }
   },[users])
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>Error loading users</div>;
 
   return (

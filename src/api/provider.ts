@@ -4,62 +4,43 @@ axiosInstance.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 export type ProviderProps = {
     namespace: string;
-    endpoint: string;
     id?: string;
     values?: FormData;
 };
 
-export const getList = async ({ namespace = "products", endpoint = "products" }: ProviderProps) => {
+export const getList = async ({namespace}: ProviderProps) => {
     try {
         const { data } = await axiosInstance.get(`/${namespace}`);
         return data || [];
     } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Lỗi khi lấy danh sách:", error);
         return [];
     }
 };
-export const getListOne = async ({ namespace = "products", endpoint = "products",id }: ProviderProps) => {
+export const getById = async ({ namespace, id }: ProviderProps) => {
     try {
         const { data } = await axiosInstance.get(`/${namespace}/${id}`);
         return data || [];
     } catch (error) {
-        console.error("Error fetching products:", error);
-        return [];
-    }
-};
-export const getUserOne = async ({ namespace = "users", endpoint = "users",id }: ProviderProps) => {
-    try {
-        const { data } = await axiosInstance.get(`/${namespace}/${id}`);
-        return data || [];
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        return [];
-    }
-};
-export const getById = async ({ namespace = "products", endpoint = "products", id }: ProviderProps) => {
-    try {
-        const { data } = await axiosInstance.get(`/${namespace}/${id}`);
-        return data || [];
-    } catch (error) {
-        console.error("Error fetching product by ID:", error);
+        console.error("Lỗi khi lấy sản phẩm theo ID:", error);
         return null;
     }
 };
-export const deleteById = async ({ namespace, endpoint, id }: ProviderProps) => {
+export const deleteById = async ({ namespace, id }: ProviderProps) => {
     try {
-        const { data } = await axiosInstance.delete(`/${namespace}/${endpoint}/${id}`);
+        const { data } = await axiosInstance.delete(`/${namespace}/${id}`);
         return data || [];
     } catch (error) {
-        console.error("Error fetching product by ID:", error);
+        console.error("Lỗi khi xóa sản phẩm theo ID:", error);
         return null;
     }
 };
-export const addItem = async ({ namespace, endpoint, values }: ProviderProps) => {
+export const postItem = async ({ namespace, values }: ProviderProps) => {
     try {
-        const { data } = await axiosInstance.post(`/${namespace}/${endpoint}`, values);
+        const { data } = await axiosInstance.post(`/${namespace}`, values);
         return data;
     } catch (error) {
-        console.error("Error adding product:", error);
+        console.error("Lỗi khi thêm sản phẩm:", error);
         throw error;
     }
 };

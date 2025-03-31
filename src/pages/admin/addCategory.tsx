@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCategories, addCategory } from "../../services/categoryService";
 import { Category } from "../../types/categories";
 import { getList } from "../../api/provider";
+import Loading from "../../components/loading";
 
 const AddCategoryForm: React.FC = () => {
     const [name, setName] = useState<string>("");
@@ -14,7 +15,7 @@ const AddCategoryForm: React.FC = () => {
     const { data, isLoading, error } = useQuery({
         queryKey: ["categories"],
         queryFn: async () =>
-            getList({ namespace: "categories", endpoint: "categories" }),
+            getList({ namespace: "categories"}),
         staleTime: 60 * 1000,
     });
 
@@ -32,7 +33,7 @@ const AddCategoryForm: React.FC = () => {
         },
     });
 
-    if (isLoading) return <div>Đang tải danh mục...</div>;
+    if (isLoading) return <Loading />;
     if (error) return <div>Lỗi: {(error as Error).message}</div>;
 
     const categoriesData: Category[] = data?.docs || [];

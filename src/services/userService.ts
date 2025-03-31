@@ -29,11 +29,6 @@ export const addToCart = async (cartItem: CartItem): Promise<any> => {
     });
     return response.data;
 };
-
-export const getCart = async (): Promise<CartData> => {
-    const response = await axiosInstance.get("/cart");
-    return response.data;
-};
 export const deleteCart = async (userId: string, productId: string, size: string): Promise<any> => {
     const response = await axiosInstance.post(
         `/cart/remove`,

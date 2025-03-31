@@ -4,17 +4,18 @@ import { getList } from '../../api/provider';
 import AdminHeader from '../../layouts/adminHeader';
 import AdminMenu from '../../layouts/adminMenu';
 import { Link } from 'react-router-dom';
+import Loading from '../../components/loading';
 
 const ListUser = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['users'],
-    queryFn: async () => getList({ namespace: 'admin/users', endpoint: '' }),
+    queryFn: async () => getList({ namespace: 'admin/users'}),
     staleTime: 60 * 1000,
   });
   
   const users = data || [];
   
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>Error loading users</div>;
 
   return (

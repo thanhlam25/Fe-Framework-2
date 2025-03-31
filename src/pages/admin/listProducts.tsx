@@ -4,15 +4,15 @@ import { Link } from "react-router-dom";
 import AdminFooter from "../../layouts/adminFooter";
 import AdminHeader from "../../layouts/adminHeader";
 import AdminMenu from "../../layouts/adminMenu";
-import { message } from "antd";
 import { deleteById, getList } from "../../api/provider";
 import { toast } from "react-toastify";
+import Loading from "../../components/loading";
 
 const ListProduct: React.FC = () => {
     const queryClient = useQueryClient();
     const { data, isLoading, error } = useQuery({
         queryKey: ["products"],
-        queryFn: () => getList({ namespace: "products",endpoint:""}),
+        queryFn: () => getList({ namespace: "products"}),
     });
     const products = data?.docs || [];
 console.log(products);
@@ -30,10 +30,10 @@ console.log(products);
     });
 
     const handleDelete = (id: string) => {
-        deleteMutation.mutate({ id, endpoint: "products",namespace:"admin" });
+        deleteMutation.mutate({ id,namespace:"admin/products" });
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loading />;
     if (error) return <div>Error: {(error as Error).message}</div>;
     if (!products.length) return <div>Không có sản phẩm nào</div>;
 

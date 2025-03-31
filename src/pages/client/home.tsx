@@ -49,8 +49,8 @@ const Home = () => {
                         <p className="pr-6 text-xl underline">IVY moda</p>
                         <p className="pl-6 text-xl text-gray-500">IVY men</p>
                     </div>
-                    {/* Truyền endpoint cho ProductItemForm */}
-                    <ProductItemForm endpoint="products" />
+                    {/* Truyền namespace cho ProductItemForm */}
+                    <ProductItemForm namespace="products" />
 
                     <div className="p-3 border border-black text-center w-32 h-12 mx-auto rounded-tl-[25px] rounded-br-[25px] mb-12 hover:bg-black hover:text-white transition-all duration-300 cursor-pointer">
                         Xem tất cả
@@ -62,8 +62,8 @@ const Home = () => {
                         <p className="pr-6 text-xl underline">IVY moda</p>
                         <p className="pl-6 text-xl text-gray-500">IVY men</p>
                     </div>
-                    {/* Truyền endpoint cho ProductItemForm */}
-                    <ProductItemForm endpoint="products" />
+                    {/* Truyền namespace cho ProductItemForm */}
+                    <ProductItemForm namespace="products" />
 
                     <div className="p-3 border border-black text-center w-32 h-12 mx-auto rounded-tl-[25px] rounded-br-[25px] mb-12 hover:bg-black hover:text-white transition-all duration-300 cursor-pointer">
                         Xem tất cả

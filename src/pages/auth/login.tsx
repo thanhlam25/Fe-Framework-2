@@ -16,11 +16,14 @@ const Login = () => {
         email: "",
         password: "",
     });
-    const { setAuth } = useAuth(); // Use the custom hook
+    const { setAuth } = useAuth();  
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-
+    const { auth } = useAuth();
+    if (auth?.isAuthenticated) {
+        navigate("/");
+    }
     const { mutate, isPending, isSuccess } = useMutation({
         mutationFn: login,
         onSuccess: (data) => {

@@ -4,17 +4,20 @@ import Footer from "../../layouts/clientFooter";
 import MenuClient from "../../layouts/clientMenu";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCart, deleteCart } from "../../services/userService";
-import { CartData, ICartItem } from "../../types/cart";
+import { deleteCart } from "../../services/userService";
+import { ICartItem } from "../../types/cart";
 import { useAuth } from "../../components/context/auth.context";
 import { toast } from "react-toastify";
+import { getList } from "../../api/provider";
+import Loading from "../../components/loading";
 
 const Cart = () => {
     const queryClient = useQueryClient();
     const { auth } = useAuth();
-    const { data: cartItems, isLoading, error } = useQuery<CartData>({
+    const { data: cartItems, isLoading, error } = useQuery({
         queryKey: ["cart"],
-        queryFn: getCart,
+        queryFn: async () => getList({ namespace: `cart` }),
+        staleTime: 60 * 1000,
     });
 
     const deleteCartMutation = useMutation({
@@ -42,7 +45,7 @@ const Cart = () => {
         });
     };
 
-    if (isLoading) return <div>Đang tải giỏ hàng...</div>;
+    if (isLoading) return <Loading />;
     if (error) return <div>Lỗi khi tải giỏ hàng: {(error as Error).message}</div>;
 
     // Kiểm tra và xử lý dữ liệu an toàn
@@ -75,19 +78,19 @@ const Cart = () => {
                     <article className="grid grid-cols-[4fr_1.5fr] gap-10 mt-[100px]">
                         <div>
                             <div className="border w-full h-[96.6px] flex justify-center rounded-tl-[20px] rounded-br-[20px]">
-                                <div className="w-[14px] h-[14px] rounded border-2 border-[#e7e8e9] rounded-full bg-black mt-6 z-10 relative">
+                                <div className="w-[14px] h-[14px] border-2 border-[#e7e8e9] rounded-full bg-black mt-6 z-10 relative">
                                     <p className="text-[12px] mt-4 left-[-20px] w-16 absolute">Giỏ hàng</p>
                                 </div>
                                 <div className="h-[3px] w-[200px] bg-[#e7e8e9] mx-2 mt-[30px]"></div>
-                                <div className="w-[14px] h-[14px] rounded rounded-full bg-white border-2 border-[#e7e8e9] mt-6 z-10 relative">
+                                <div className="w-[14px] h-[14px] rounded-full bg-white border-2 border-[#e7e8e9] mt-6 z-10 relative">
                                     <div className="text-[12px] mt-4 left-[-20px] w-16 absolute">Đặt hàng</div>
                                 </div>
                                 <div className="h-[3px] w-[200px] bg-[#e7e8e9] mx-2 mt-[30px]"></div>
-                                <div className="w-[14px] h-[14px] rounded rounded-full bg-white border-2 border-[#e7e8e9] mt-6 z-10 relative">
+                                <div className="w-[14px] h-[14px] rounded-full bg-white border-2 border-[#e7e8e9] mt-6 z-10 relative">
                                     <div className="text-[12px] mt-4 left-[-20px] w-20 absolute">Thanh toán</div>
                                 </div>
                                 <div className="h-[3px] w-[200px] bg-[#e7e8e9] mx-2 mt-[30px]"></div>
-                                <div className="w-[14px] h-[14px] rounded rounded-full bg-white border-2 border-[#e7e8e9] mt-6 z-10 relative">
+                                <div className="w-[14px] h-[14px] rounded-full bg-white border-2 border-[#e7e8e9] mt-6 z-10 relative">
                                     <div className="text-[12px] mt-4 left-[-40px] w-28 absolute">Hoàn thành đơn</div>
                                 </div>
                             </div>

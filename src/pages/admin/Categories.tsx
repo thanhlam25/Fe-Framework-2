@@ -5,6 +5,7 @@ import { Category } from "../../types/categories";
 import AdminHeader from "../../layouts/adminHeader";
 import AdminMenu from "../../layouts/adminMenu";
 import AddCategoryForm from "./addCategory";
+import Loading from "../../components/loading";
 
 interface CategoryResponse {
     docs: Category[];
@@ -103,7 +104,7 @@ const Categories: React.FC = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    if (isLoading) return <div>Đang tải danh mục...</div>;
+    if (isLoading) return <Loading />;
     if (isError) return <div>Lỗi: {(error as Error).message}</div>;
 
     const categoriesData: Category[] = data?.docs || [];

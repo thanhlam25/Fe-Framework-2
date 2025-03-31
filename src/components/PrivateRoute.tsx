@@ -5,8 +5,7 @@ const PrivateRoute = ({ element }: { element: JSX.Element }) => {
     const { auth } = useAuth();
 
     if (!auth.isAuthenticated || auth.user.role != "3") {
-        // return <Navigate to="/" replace />;
-        console.log("12345");
+        return <Navigate to="/" replace />;
     }
     return element;
 };

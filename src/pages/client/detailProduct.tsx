@@ -10,6 +10,7 @@ import { getById } from '../../api/provider';
 import { addToCart } from '../../services/userService';
 import { Rate } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../components/loading';
 
 const DetailProduct = ({ productId }: { productId: string }) => {
     const queryClient = useQueryClient();
@@ -17,7 +18,7 @@ const DetailProduct = ({ productId }: { productId: string }) => {
     const navigate = useNavigate();
     const { data: product, isLoading, error } = useQuery({
         queryKey: ['product', productId],
-        queryFn: () => getById({ namespace: "products", endpoint: "products", id: productId }),
+        queryFn: () => getById({ namespace: "products", id: productId }),
     });
 
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -69,7 +70,7 @@ const DetailProduct = ({ productId }: { productId: string }) => {
 
     const isOutOfStock = product?.sizes.every((size: { stock: number; }) => size.stock === 0) || false;
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loading />;
     if (error) return <div>Error loading product: {(error as Error).message}</div>;
     if (!product) return <div>Product not found</div>;
 

@@ -10,7 +10,7 @@ import { AxiosError } from "axios";
 import { Upload, message, Modal } from "antd";
 import type { UploadFile, UploadProps, UploadChangeParam } from "antd/es/upload/interface";
 import { PlusOutlined } from "@ant-design/icons";
-import { addItem } from "../../api/provider";
+import { postItem } from "../../api/provider";
 
 const AddProduct: React.FC = () => {
     const navigate = useNavigate();
@@ -74,7 +74,7 @@ const AddProduct: React.FC = () => {
 
     const mutation = useMutation<IProduct, Error, FormData>({
         mutationFn: (formData: FormData) =>
-            addItem({ namespace: "admin", endpoint: "products", values: formData }),
+            postItem({ namespace: "admin/products", values: formData }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["products"] });
             navigate("/admin/products");

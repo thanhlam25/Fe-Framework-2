@@ -8,13 +8,13 @@ import { Autoplay } from "swiper/modules";
 import { Link } from "react-router-dom";
 
 interface ProductItemFormProps {
-    endpoint: string;
+    namespace: string;
 }
 
-const ProductItemForm: React.FC<ProductItemFormProps> = ({ endpoint }) => {
+const ProductItemForm: React.FC<ProductItemFormProps> = ({ namespace }) => {
     const { data, isLoading, error } = useQuery({
-        queryKey: ["products", endpoint],
-        queryFn: async () => getList({ namespace: "products", endpoint: "products" }),
+        queryKey: ["products", namespace],
+        queryFn: async () => getList({ namespace: `${namespace}` }),
         staleTime: 60 * 1000,
     });
 

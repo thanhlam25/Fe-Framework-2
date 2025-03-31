@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCategories } from "../../services/categoryService";
 import { Category } from "../../types/categories";
+import Loading from "../../components/loading";
 
 interface CategoryResponse {
     docs: Category[];
@@ -48,7 +49,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onChange }) => {
         }
     }, [selectedLevel1, selectedLevel2, selectedLevel3, categoriesData, onChange]);
 
-    if (isLoading) return <div>Đang tải danh mục...</div>;
+    if (isLoading) return <Loading />;
 
     return (
         <div className="space-y-4">
