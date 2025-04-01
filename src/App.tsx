@@ -15,6 +15,7 @@ import ListUser from './pages/admin/listUser';
 import UseDetail from './pages/admin/useDetail';
 import Dathang from './pages/client/dathang';
 import CheckLogin from './components/CheckLogin'; //Nếu chưa đăng nhập thì chuyển về trang login
+import Orders from './pages/client/orders';
 
 function App() {
 
@@ -30,7 +31,7 @@ function App() {
     { path: '/login', element: <Login /> },
     { path: '/register', element: <Register /> },
     { path: '/products/:id', element: <DetailProductWrapper /> },
-
+    { path: '/orders', element: <CheckLogin element={<Orders />} /> },
     { path: '/cart', element: <CheckLogin element={<Cart />} /> },
     { path: '/dathang', element: <CheckLogin element={<Dathang />} /> },
 
