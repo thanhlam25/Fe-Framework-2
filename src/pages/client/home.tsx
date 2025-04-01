@@ -71,6 +71,7 @@ const Home = () => {
                     <img
                         className="rounded-tl-[80px] rounded-br-[80px]"
                         src='/images/banner1.4.webp'
+                        alt=""
                     />
                     <div className="p-4"></div>
                     <Slideshow2 />

@@ -7,6 +7,7 @@ import { ICartItem } from '../../types/cart';
 import { useQuery } from '@tanstack/react-query';
 import { getList } from '../../api/provider';
 import { useAuth } from '../../components/context/auth.context';
+import Loading from '../../components/loading';
 
 
 const Orders = () => {
@@ -16,7 +17,7 @@ const Orders = () => {
   })
 const user = useAuth();
 
-  if (isLoading) {return <p>Loading...</p>;}
+  if (isLoading) {return <Loading />}
   if (error) {return <p>Error loading orders!</p>;}
   
   return (
