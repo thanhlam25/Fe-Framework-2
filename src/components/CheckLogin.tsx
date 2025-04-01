@@ -6,7 +6,7 @@ const CheckLogin = ({ element }: { element: JSX.Element }) => {
     const { auth } = useAuth();
 
     if (!auth.isAuthenticated) {
-        return <Navigate to="/login" replace />;
+        // return <Navigate to="/login" replace />;
     }
     return element;
 };

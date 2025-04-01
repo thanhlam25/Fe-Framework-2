@@ -6,6 +6,7 @@ import Footer from '../../layouts/clientFooter';
 import { ICartItem } from '../../types/cart';
 import { useQuery } from '@tanstack/react-query';
 import { getList } from '../../api/provider';
+import { useAuth } from '../../components/context/auth.context';
 
 
 const Orders = () => {
@@ -13,7 +14,7 @@ const Orders = () => {
     queryKey: ['orders'],
     queryFn:async () =>getList({ namespace: "orders/"}),
   })
-console.log(data);
+const user = useAuth();
 
   if (isLoading) {return <p>Loading...</p>;}
   if (error) {return <p>Error loading orders!</p>;}
@@ -43,7 +44,7 @@ console.log(data);
             <nav className="flex-grow">
               <div className="font-semibold text-gray-500 flex items-center gap-2 p-4">
                 <img src="/images/useravt.png" className="w-8 h-8" alt="" />
-                lâm thành
+              {user.auth.user.email}
               </div>
               <hr />
               <ul>
@@ -102,15 +103,26 @@ console.log(data);
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((order: any, index:any) => (
+                  {data.orders.map((order: any, index:any) => (
                     <tr key={index} className="border-b">
-                      <td className="py-2 px-4">{order._id}</td>
-                      <td className="py-2 px-4">{order.createdAt}</td>
-                      <td className="py-2 px-4">{order.status}</td>
-                      <td className="py-2 px-4">{order.totalAmount}</td>
+                      <td className="py-2 px-4">{order.orderId}</td>
+                      <td className="py-2 px-4">{new Date(order.createdAt).toLocaleString('vi-VN')}</td>
+                      <td className={`py-2 px-4 ${
+                        order.status === 'Huỷ do quá thời gian thanh toán' ? 'text-red-500' :
+                        order.status === 'Đã thanh toán' ? 'text-green-500' : 
+                        order.status === 'Chờ thanh toán' ? 'text-yellow-500' :
+                        order.status === 'Chờ xác nhận' ? 'text-blue-500' :
+                        order.status === 'Đang giao hàng' ? 'text-purple-500' :
+                        order.status === 'Đã giao hàng' ? 'text-green-500' :
+                        order.status === 'Đã hủy' ? 'text-red-500' :
+                        ''
+                      }`}>
+                        {order.status === 'Huỷ do quá thời gian thanh toán' ? 'Quá hạn thanh toán' : order.status}
+                      </td>
+                      <td className="py-2 px-4">{order.totalAmount.toLocaleString('vi-VN')} đ</td>
                       <td className="py-2 px-4">
-                        <Link to={`/order-details/${order.order_id}`} className="text-red-500 hover:underline">
-                          Chi tiết đơn hàng
+                        <Link to={`/order-details/${order._id}`} className="text-red-500 hover:underline">
+                          Chi tiết
                         </Link>
                       </td>
                     </tr>
