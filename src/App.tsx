@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css'
+import './App.css';
 import { Route, Routes, useParams, useRoutes } from 'react-router-dom';
 import Home from './pages/client/home';
 import Login from './pages/auth/login';
@@ -18,32 +18,30 @@ import CheckLogin from './components/CheckLogin'; //Nếu chưa đăng nhập th
 import Orders from './pages/client/orders';
 
 function App() {
+    const DetailProductWrapper = () => {
+        const { id } = useParams();
+        if (!id) {
+            return <div>Product ID không hợp lệ</div>;
+        }
+        return <DetailProduct productId={id} />;
+    };
+    const routes = useRoutes([
+        { path: '/', element: <Home /> },
+        { path: '/login', element: <Login /> },
+        { path: '/register', element: <Register /> },
+        { path: '/products/:id', element: <DetailProductWrapper /> },
+        { path: '/orders', element: <CheckLogin element={<Orders />} /> },
+        { path: '/cart', element: <CheckLogin element={<Cart />} /> },
+        { path: '/dathang', element: <CheckLogin element={<Dathang />} /> },
 
-  const DetailProductWrapper = () => {
-    const { id } = useParams();
-    if (!id) {
-      return <div>Product ID không hợp lệ</div>;
-    }
-    return <DetailProduct productId={id} />;
-  };
-  const routes = useRoutes([
-    { path: '/', element: <Home /> },
-    { path: '/login', element: <Login /> },
-    { path: '/register', element: <Register /> },
-    { path: '/products/:id', element: <DetailProductWrapper /> },
-    { path: '/orders', element: <CheckLogin element={<Orders />} /> },
-    { path: '/cart', element: <CheckLogin element={<Cart />} /> },
-    { path: '/dathang', element: <CheckLogin element={<Dathang />} /> },
-
-
-    { path: '/admin', element: <PrivateRoute element={<Admin />} /> },
-    { path: '/admin/users', element: <PrivateRoute element={<ListUser />} /> },
-    { path: '/admin/users/:id', element: <PrivateRoute element={<UseDetail />} /> },
-    { path: '/admin/products', element: <PrivateRoute element={<ListProduct />} /> },
-    { path: '/admin/add-product', element: <PrivateRoute element={<AddProduct />} /> },
-    { path: '/admin/categories', element: <PrivateRoute element={<Categories />} /> },
-  ])
-  return routes
+        { path: '/admin', element: <PrivateRoute element={<Admin />} /> },
+        { path: '/admin/users', element: <PrivateRoute element={<ListUser />} /> },
+        { path: '/admin/users/:id', element: <PrivateRoute element={<UseDetail />} /> },
+        { path: '/admin/products', element: <PrivateRoute element={<ListProduct />} /> },
+        { path: '/admin/add-product', element: <PrivateRoute element={<AddProduct />} /> },
+        { path: '/admin/categories', element: <PrivateRoute element={<Categories />} /> },
+    ]);
+    return routes;
 }
 
-export default App
+export default App;

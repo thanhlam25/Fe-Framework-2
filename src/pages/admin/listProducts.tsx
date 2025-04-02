@@ -1,36 +1,36 @@
-import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import AdminFooter from "../../layouts/adminFooter";
-import AdminHeader from "../../layouts/adminHeader";
-import AdminMenu from "../../layouts/adminMenu";
-import { deleteById, getList } from "../../api/provider";
-import { toast } from "react-toastify";
-import Loading from "../../components/loading";
+import React, { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import AdminFooter from '../../layouts/adminFooter';
+import AdminHeader from '../../layouts/adminHeader';
+import AdminMenu from '../../layouts/adminMenu';
+import { deleteById, getList } from '../../api/provider';
+import { toast } from 'react-toastify';
+import Loading from '../../components/loading';
 
 const ListProduct: React.FC = () => {
     const queryClient = useQueryClient();
     const { data, isLoading, error } = useQuery({
-        queryKey: ["products"],
-        queryFn: () => getList({ namespace: "products"}),
+        queryKey: ['products'],
+        queryFn: () => getList({ namespace: 'products' }),
     });
     const products = data?.docs || [];
-console.log(products);
+    console.log(products);
 
     const deleteMutation = useMutation({
         mutationFn: deleteById,
         onSuccess: () => {
-            toast.success("Xóa sản phẩm thành công");
-            queryClient.invalidateQueries({ queryKey: ["products"] });
+            toast.success('Xóa sản phẩm thành công');
+            queryClient.invalidateQueries({ queryKey: ['products'] });
         },
         onError: (error: Error) => {
-            console.error("Lỗi khi xóa danh mục:", error);
-            toast.error(error.message || "Xóa sản phẩm thất bại");
+            console.error('Lỗi khi xóa danh mục:', error);
+            toast.error(error.message || 'Xóa sản phẩm thất bại');
         },
     });
 
     const handleDelete = (id: string) => {
-        deleteMutation.mutate({ id,namespace:"admin/products" });
+        deleteMutation.mutate({ id, namespace: 'admin/products' });
     };
 
     if (isLoading) return <Loading />;
@@ -43,11 +43,13 @@ console.log(products);
             <div className="flex flex-1 overflow-hidden">
                 <AdminMenu className="w-64 bg-black p-6" />
                 <div className="flex-1 flex flex-col">
-                    <header className="bg-white shadow px-4 py-2 flex justify-between items-center fixed w-full">
-                    </header>
+                    <header className="bg-white shadow px-4 py-2 flex justify-between items-center fixed w-full"></header>
                     <main className="p-4 flex-grow bg-gray-100 pt-16">
                         <div className="bg-white p-6 shadow rounded">
-                            <table id="export-table" className="table-auto w-full text-left border-collapse">
+                            <table
+                                id="export-table"
+                                className="table-auto w-full text-left border-collapse"
+                            >
                                 <thead>
                                     <tr>
                                         <th className="px-4 py-2 border">Tên sản phẩm</th>
@@ -58,18 +60,29 @@ console.log(products);
                                 </thead>
                                 <tbody>
                                     {products.map((product: any) => (
-                                        <tr key={product._id} className="hover:bg-gray-50 cursor-pointer">
+                                        <tr
+                                            key={product._id}
+                                            className="hover:bg-gray-50 cursor-pointer"
+                                        >
                                             <td className="px-4 py-2 border">{product.name}</td>
                                             <td className="px-4 py-2 border">{product.sku}</td>
                                             <td className="px-4 py-2 border">
                                                 <div className="flex flex-wrap gap-2">
                                                     {product.colors?.map((color: any) => (
-                                                        <div key={color._id} className="flex items-center">
+                                                        <div
+                                                            key={color._id}
+                                                            className="flex items-center"
+                                                        >
                                                             <div
                                                                 className="w-6 h-6 rounded"
-                                                                style={{ backgroundColor: color.actualColor }}
+                                                                style={{
+                                                                    backgroundColor:
+                                                                        color.actualColor,
+                                                                }}
                                                             />
-                                                            <span className="ml-2">{color.colorName}</span>
+                                                            <span className="ml-2">
+                                                                {color.colorName}
+                                                            </span>
                                                         </div>
                                                     ))}
                                                 </div>

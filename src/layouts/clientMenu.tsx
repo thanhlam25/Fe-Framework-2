@@ -1,15 +1,15 @@
-import React, { useContext, useState, useEffect, useRef, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../components/context/auth.context";
-import { Category } from "../types/categories";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "../services/userService";
-import { toast } from "react-toastify";
+import React, { useContext, useState, useEffect, useRef, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../components/context/auth.context';
+import { Category } from '../types/categories';
+import { useMutation } from '@tanstack/react-query';
+import { logout } from '../services/userService';
+import { toast } from 'react-toastify';
 
 const MenuClient = () => {
     const context = useContext(AuthContext);
     if (!context) {
-        throw new Error("MenuClient phải được sử dụng trong AuthProvider");
+        throw new Error('MenuClient phải được sử dụng trong AuthProvider');
     }
     const { auth, setAuth } = context;
     const { isAuthenticated, user } = auth;
@@ -20,9 +20,33 @@ const MenuClient = () => {
 
     useEffect(() => {
         const fakeCategories: Category[] = [
-            { _id: "1", name: "Nam", parentId: null, ancestors: [], level: 0, createdAt: "", updatedAt: "" },
-            { _id: "2", name: "Nữ", parentId: null, ancestors: [], level: 0, createdAt: "", updatedAt: "" },
-            { _id: "3", name: "Trẻ Trâu", parentId: null, ancestors: [], level: 0, createdAt: "", updatedAt: "" },
+            {
+                _id: '1',
+                name: 'Nam',
+                parentId: null,
+                ancestors: [],
+                level: 0,
+                createdAt: '',
+                updatedAt: '',
+            },
+            {
+                _id: '2',
+                name: 'Nữ',
+                parentId: null,
+                ancestors: [],
+                level: 0,
+                createdAt: '',
+                updatedAt: '',
+            },
+            {
+                _id: '3',
+                name: 'Trẻ Trâu',
+                parentId: null,
+                ancestors: [],
+                level: 0,
+                createdAt: '',
+                updatedAt: '',
+            },
         ];
         setCategories(fakeCategories);
     }, []);
@@ -43,20 +67,20 @@ const MenuClient = () => {
     const mutation = useMutation({
         mutationFn: logout,
         onSuccess: () => {
-            localStorage.removeItem("token");
+            localStorage.removeItem('token');
             setAuth({
                 isAuthenticated: false,
-                user: { id: "", email: "", role: "" },
+                user: { id: '', email: '', role: '' },
             });
-            toast.success("Đăng xuất thành công!", {
-                position: "top-right",
+            toast.success('Đăng xuất thành công!', {
+                position: 'top-right',
                 autoClose: 2000,
             });
-            navigate("/login");
+            navigate('/login');
         },
-        onError: (error) => {
-            toast.error("Đăng xuất thất bại!", {
-                position: "top-right",
+        onError: error => {
+            toast.error('Đăng xuất thất bại!', {
+                position: 'top-right',
                 autoClose: 2000,
             });
         },
@@ -69,7 +93,7 @@ const MenuClient = () => {
     return (
         <header className="grid grid-cols-[1fr_0.3fr_1fr] items-center py-5 bg-white fixed top-0 w-[90%] z-50 shadow-sm">
             <div className="flex items-center justify-start">
-                {categories.map((category) => (
+                {categories.map(category => (
                     <div key={category._id} className="relative group">
                         <Link
                             to={`/category/${category._id}`}
@@ -82,10 +106,16 @@ const MenuClient = () => {
                 <Link to="/sale" className="text-[12px] font-semibold text-[rgb(255,0,0)] mr-4">
                     THÁNG VÀNG SĂN SALE
                 </Link>
-                <Link to="/collection" className="text-[12px] font-semibold text-gray-800 mr-4 hover:text-red-500 transition-all duration-300">
+                <Link
+                    to="/collection"
+                    className="text-[12px] font-semibold text-gray-800 mr-4 hover:text-red-500 transition-all duration-300"
+                >
                     BỘ SƯU TẬP
                 </Link>
-                <Link to="/about" className="text-[12px] font-semibold text-gray-800 hover:text-red-500 transition-all duration-300">
+                <Link
+                    to="/about"
+                    className="text-[12px] font-semibold text-gray-800 hover:text-red-500 transition-all duration-300"
+                >
                     VỀ CHÚNG TÔI
                 </Link>
             </div>
@@ -134,33 +164,51 @@ const MenuClient = () => {
                                         Tài khoản của tôi
                                     </span>
                                     <hr />
-                                    <Link to="/account" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                                    <Link
+                                        to="/account"
+                                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+                                    >
                                         Thông tin tài khoản
                                     </Link>
-                                    {user.role === "3" && (
-                                        <Link to="/admin" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                                    {user.role === '3' && (
+                                        <Link
+                                            to="/admin"
+                                            className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+                                        >
                                             Quản trị admin
                                         </Link>
                                     )}
-                                    <Link to="/orders" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                                    <Link
+                                        to="/orders"
+                                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+                                    >
                                         Đơn hàng của tôi
                                     </Link>
-                                    <Link to="/viewed-products" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                                    <Link
+                                        to="/viewed-products"
+                                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+                                    >
                                         Sản phẩm đã xem
                                     </Link>
-                                    <Link to="/favorites" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                                    <Link
+                                        to="/favorites"
+                                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+                                    >
                                         Sản phẩm yêu thích
                                     </Link>
                                     <button
                                         onClick={handleLogout}
                                         disabled={mutation.isPending}
-                                        className={`block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-200 ${mutation.isPending ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        className={`block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-200 ${mutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     >
-                                        {mutation.isPending ? "Đang đăng xuất..." : "Đăng xuất"}
+                                        {mutation.isPending ? 'Đang đăng xuất...' : 'Đăng xuất'}
                                     </button>
                                 </>
                             ) : (
-                                <Link to="/login" className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                                <Link
+                                    to="/login"
+                                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+                                >
                                     Đăng nhập
                                 </Link>
                             )}

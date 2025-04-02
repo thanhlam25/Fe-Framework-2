@@ -1,8 +1,16 @@
-import { createContext, ReactNode, useEffect, useState, Dispatch, SetStateAction, useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { info, logout } from "../../services/userService";
-import { AxiosError } from "axios";
-import Loading from "../loading";
+import {
+    createContext,
+    ReactNode,
+    useEffect,
+    useState,
+    Dispatch,
+    SetStateAction,
+    useContext,
+} from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { info, logout } from '../../services/userService';
+import { AxiosError } from 'axios';
+import Loading from '../loading';
 interface AuthState {
     isAuthenticated: boolean;
     user: {
@@ -22,7 +30,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (context === undefined) {
-        throw new Error("useAuth phải được sử dụng trong AuthProvider");
+        throw new Error('useAuth phải được sử dụng trong AuthProvider');
     }
     return context;
 };
@@ -35,33 +43,33 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
     const [auth, setAuth] = useState<AuthState>({
         isAuthenticated: false,
         user: {
-            id: "",
-            email: "",
-            role: "",
+            id: '',
+            email: '',
+            role: '',
         },
     });
 
     const { data, isLoading, error } = useQuery({
-        queryKey: ["userInfo"],
+        queryKey: ['userInfo'],
         queryFn: info,
-        enabled: !!localStorage.getItem("token"),
+        enabled: !!localStorage.getItem('token'),
     });
 
     const handleLogout = async () => {
         try {
             await logout();
-            localStorage.removeItem("token");
+            localStorage.removeItem('token');
             setAuth({
                 isAuthenticated: false,
                 user: {
-                    id: "",
-                    email: "",
-                    role: "",
+                    id: '',
+                    email: '',
+                    role: '',
                 },
             });
-            window.location.href = "/login";
+            window.location.href = '/login';
         } catch (logoutError) {
-            console.error("Lỗi khi đăng xuất:", logoutError);
+            console.error('Lỗi khi đăng xuất:', logoutError);
         }
     };
 
@@ -70,9 +78,9 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
             setAuth({
                 isAuthenticated: true,
                 user: {
-                    id: data.id || "",
-                    email: data.email || "",
-                    role: data.role || ""
+                    id: data.id || '',
+                    email: data.email || '',
+                    role: data.role || '',
                 },
             });
         } else if (error) {
@@ -83,9 +91,9 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
                 setAuth({
                     isAuthenticated: false,
                     user: {
-                        id: "",
-                        email: "",
-                        role: "",
+                        id: '',
+                        email: '',
+                        role: '',
                     },
                 });
             }
@@ -97,9 +105,5 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
         return <Loading />;
     }
 
-    return (
-        <AuthContext.Provider value={{ auth, setAuth }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={{ auth, setAuth }}>{children}</AuthContext.Provider>;
 };

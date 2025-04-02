@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { useAuth } from './context/auth.context';
 import { useNavigate, Navigate } from 'react-router-dom';
 
@@ -11,4 +11,4 @@ const CheckLogin = ({ element }: { element: JSX.Element }) => {
     return element;
 };
 
-export default CheckLogin
+export default CheckLogin;
