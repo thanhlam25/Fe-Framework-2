@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteCart } from '../../services/userService';
 import { ICartItem } from '../../types/cart';
-import { useAuth } from '../../components/context/auth.context';
+import { useAuth } from '../../context/auth.context';
 import { toast } from 'react-toastify';
 import { getList } from '../../api/provider';
 import Loading from '../../components/loading';

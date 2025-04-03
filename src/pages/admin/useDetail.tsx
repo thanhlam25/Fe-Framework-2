@@ -4,7 +4,6 @@ import AdminHeader from '../../layouts/adminHeader';
 import AdminMenu from '../../layouts/adminMenu';
 import { useParams } from 'react-router-dom';
 import Loading from '../../components/loading';
-import { useAuth } from '../../components/context/auth.context';
 
 const UseDetail = () => {
     const { id } = useParams();
