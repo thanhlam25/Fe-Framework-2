@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeaderClient from "../../layouts/clientHeader";
 import Footer from "../../layouts/clientFooter";
 import MenuClient from "../../layouts/clientMenu";
@@ -12,6 +12,10 @@ import { getById, getList } from "../../api/provider";
 import Loading from "../../components/loading";
 import axiosInstance from "../../services/axiosInstance";
 import moment from "moment";
+import { useGHNMapper } from "../../utils/ghnMapping";
+// import findGHNProvinceId from "../../utils/ghnMapping";
+// import {findGHNDistrictId} from "../../utils/ghnMapping";
+// import {findGHNWardCode} from "../../utils/ghnMapping";
 
 const Dathang = () => {
   const queryClient = useQueryClient();
@@ -55,11 +59,11 @@ const Dathang = () => {
   const address =
     userData[0].address +
     ", " +
-    userData[0].district +
+    userData[0].district.name +
     ", " +
-    userData[0].commune +
+    userData[0].commune.name +
     ", " +
-    userData[0].city;
+    userData[0].city.name;
 
   const items: ICartItem[] = cartItems?.items || [];
   const validItems = items.filter(
@@ -272,6 +276,74 @@ const Dathang = () => {
     }
   };
 
+
+
+
+
+
+
+
+
+  const {
+    provinces,
+    districts,
+    wards,
+    fetchDistricts,
+    fetchWards,
+    findProvinceId,
+    findDistrictId,
+    findWardCode
+  } = useGHNMapper("5191a6d2-16d1-11f0-8b10-8e771ee3638b"); // thay token bằng token thực
+
+  const cityName = "Hà Nội";
+  const districtName = "Ba Đình";
+  const wardName = "Phúc Xá";
+
+  useEffect(() => {
+    // 1. Tìm ProvinceID từ cityName
+    const provinceId = findProvinceId(cityName);
+    if (!provinceId) return;
+
+    // 2. Gọi API lấy quận
+    fetchDistricts(provinceId);
+
+    // Khi district có dữ liệu:
+    const timeout1 = setTimeout(() => {
+      const districtId = findDistrictId(districtName, provinceId);
+      if (!districtId) return;
+
+      // 3. Gọi API lấy phường
+      fetchWards(districtId);
+
+      // Khi ward có dữ liệu:
+      const timeout2 = setTimeout(() => {
+        const wardCode = findWardCode(wardName, districtId);
+
+        // ✅ In ra kết quả cuối cùng
+        console.log({ provinceId, districtId, wardCode });
+      }, 500); // chờ ward về
+
+    }, 500); // chờ district về
+
+    return () => {
+      clearTimeout(timeout1);
+    };
+  }, [provinces]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <>
       <HeaderClient />
@@ -446,7 +518,7 @@ const Dathang = () => {
                                 >
                                   <img
                                     src={
-                                      item?.productVariantId?.images?.main ||
+                                      item?.productVariantId?.images?.main?.url ||
                                       "/fallback.jpg"
                                     }
                                     alt={
