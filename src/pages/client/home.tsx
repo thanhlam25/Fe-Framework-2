@@ -1,9 +1,6 @@
-import React from "react";
-import HeaderClient from "../../layouts/clientHeader";
-import MenuClient from "../../layouts/clientMenu";
 import ProductItemForm from "../../components/ProductItem";
 import Slideshow from "../../components/clientSlideShow";
-import Footer from "../../layouts/clientFooter";
+import ClientLayout from "../../layouts/clientLayout";
 
 const Slideshow1 = () => {
   const images1 = [
@@ -26,12 +23,7 @@ const Slideshow2 = () => {
 const Home = () => {
   return (
     <>
-      <HeaderClient />
-      <div className="mx-[5%]">
-        {/* Thanh menu */}
-        <MenuClient />
-
-        {/* Banner Sale */}
+      <ClientLayout>
         <article className="mt-[82px]">
           <div className="grid grid-cols-[1fr_1.3fr_1fr] items-center justify-center pb-6">
             <div className="bg-[#D73831] text-[14px] text-white py-1 px-2 font-semibold text-center">
@@ -84,8 +76,7 @@ const Home = () => {
           <div className="p-4"></div>
           <Slideshow2 />
         </article>
-        <Footer />
-      </div>
+      </ClientLayout>
     </>
   );
 };

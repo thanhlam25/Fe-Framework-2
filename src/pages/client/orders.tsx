@@ -1,14 +1,10 @@
-import React from "react";
-import MenuClient from "../../layouts/clientMenu";
-import HeaderClient from "../../layouts/clientHeader";
 import { Link } from "react-router-dom";
-import Footer from "../../layouts/clientFooter";
-import { ICartItem } from "../../types/cart";
 import { useQuery } from "@tanstack/react-query";
 import { getList } from "../../api/provider";
 import { useAuth } from "../../context/auth.context";
 import Loading from "../../components/loading";
 import MenuInfo from "../../components/menuInfo";
+import ClientLayout from "../../layouts/clientLayout";
 
 const Orders = () => {
   const { data, isLoading, error } = useQuery({
@@ -26,9 +22,7 @@ const Orders = () => {
 
   return (
     <>
-      <HeaderClient />
-      <div className="mx-[5%]">
-        <MenuClient />
+      <ClientLayout>
         <article className="mt-[98px]">
           <div className="flex gap-4 my-4">
             <div className="text-sm">
@@ -137,8 +131,7 @@ const Orders = () => {
             </div>
           </div>
         </div>
-        <Footer />
-      </div>
+      </ClientLayout>
     </>
   );
 };
