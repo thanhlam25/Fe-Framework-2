@@ -6,7 +6,7 @@ import { useAuth } from "../../context/auth.context";
 import { toast } from "react-toastify";
 import { getList } from "../../api/provider";
 import Loading from "../../components/loading";
-import ClientLayout from "../../layouts/clientLayout";
+import ClientLayout from "../../layouts/ClientLayout";
 
 const Cart = () => {
   const queryClient = useQueryClient();
@@ -88,7 +88,7 @@ const Cart = () => {
   return (
     <>
       <ClientLayout>
-        <article className="mt-16 md:mt-24 px-4 md:px-6 lg:px-8">
+        <article className="mt-16 md:mt-24">
           <article className="grid grid-cols-1 lg:grid-cols-[4fr_1.5fr] gap-6 lg:gap-10">
             <div>
               {/* Stepper - Responsive */}
@@ -113,7 +113,7 @@ const Cart = () => {
                 <div className="h-[3px] w-16 md:w-[200px] bg-[#e7e8e9] mx-1 md:mx-2 mt-[7px] md:mt-[30px]"></div>
                 <div className="w-[14px] h-[14px] rounded-full bg-white border-2 border-[#e7e8e9] mt-0 md:mt-6 z-10 relative">
                   <div className="text-xs md:text-[12px] mt-4 left-[-40px] w-28 absolute">
-                    Hoàn thành đơn
+                    Hoàn thành
                   </div>
                 </div>
               </div>
@@ -255,7 +255,7 @@ const Cart = () => {
                       </div>
                     ))
                   ) : (
-                    <div className="py-8 text-center text-gray-500">
+                    <div className="py-8 text-center text-sm text-gray-600">
                       Giỏ hàng của bạn trống.
                     </div>
                   )}
@@ -263,21 +263,21 @@ const Cart = () => {
 
                 {/* Desktop view for cart items */}
                 <table className="hidden lg:table w-full bg-white table-auto border-collapse">
-                  <thead className="border-b bg-gray-100">
+                  <thead className="border-b bg-gray-50">
                     <tr>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                      <th className="py-3 pr-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
                         Sản phẩm
                       </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                      <th className="py-3 pr-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
                         Số lượng
                       </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                      <th className="py-3 pr-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
                         Size
                       </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                      <th className="py-3 pr-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
                         Tổng tiền
                       </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700"></th>
+                      <th className="py-3 pr-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -395,7 +395,7 @@ const Cart = () => {
                       <tr>
                         <td
                           colSpan={5}
-                          className="px-4 py-2 text-center text-gray-500"
+                          className="px-4 py-2 text-center text-sm text-gray-600"
                         >
                           Giỏ hàng của bạn trống.
                         </td>

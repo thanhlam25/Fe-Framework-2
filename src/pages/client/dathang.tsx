@@ -9,7 +9,7 @@ import Loading from "../../components/loading";
 import axiosInstance from "../../services/axiosInstance";
 import moment from "moment";
 import { useGHNMapper } from "../../utils/ghnMapping";
-import ClientLayout from "../../layouts/clientLayout";
+import ClientLayout from "../../layouts/ClientLayout";
 
 const Dathang = () => {
   const queryClient = useQueryClient();
@@ -360,7 +360,7 @@ const Dathang = () => {
                 <div className="h-[3px] w-[200px] bg-[#e7e8e9] mx-2 mt-[30px]"></div>
                 <div className="w-[14px] h-[14px] rounded-full bg-white border-2 border-[#e7e8e9] mt-6 z-10 relative">
                   <div className="text-[12px] mt-4 left-[-40px] w-28 absolute">
-                    Hoàn thành đơn
+                    Hoàn thành
                   </div>
                 </div>
               </div>

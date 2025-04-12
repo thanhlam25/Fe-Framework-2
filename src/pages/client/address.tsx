@@ -1,7 +1,7 @@
 import MenuInfo from "../../components/menuInfo";
 import { useQuery } from "@tanstack/react-query";
 import { getList } from "../../api/provider";
-import ClientLayout from "../../layouts/clientLayout";
+import ClientLayout from "../../layouts/ClientLayout";
 
 const Address = () => {
   const { data, isLoading } = useQuery({

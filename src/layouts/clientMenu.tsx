@@ -16,6 +16,7 @@ const MenuClient = () => {
   const { auth, setAuth } = context;
   const { isAuthenticated, user } = auth;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
 
@@ -79,10 +80,23 @@ const MenuClient = () => {
     mutation.mutate();
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".user-menu-container") && isUserMenuOpen) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
+
   return (
     <>
       {/* Thanh menu trên cùng */}
-      <header className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_0.3fr_1fr] items-center py-5 bg-white fixed top-0 w-[90%] z-50 shadow-sm">
+      <header className="grid grid-cols-[0.2fr_1fr_0.2fr] md:grid-cols-[1fr_0.3fr_1fr] items-center py-5 bg-white fixed top-0 w-[90%] z-50 shadow-sm">
         {/* Cột trái: Hamburger trên màn hình nhỏ, Danh mục trên màn hình lớn */}
         <div className="flex items-center justify-start space-x-4">
           <div className="block md:hidden">
@@ -131,13 +145,111 @@ const MenuClient = () => {
           </Link>
         </div>
 
-        {/* Cột phải: Chỉ giữ giỏ hàng trên màn hình nhỏ */}
-        <div className="flex items-center justify-end space-x-4">
+        {/* Cột phải: Các biểu tượng */}
+        <div className="flex items-center justify-end space-x-6">
+          {/* Biểu tượng Tìm kiếm */}
+          <div className="hidden md:flex relative h-9 border items-center w-full max-w-xs">
+            <div className="flex px-2 gap-3 items-center w-full">
+              <img
+                src="/images/magnifying-glass.png"
+                alt="Search"
+                className="w-4 h-4 flex-shrink-0"
+              />
+              <input
+                type="text"
+                name="searchname"
+                id="searchname"
+                placeholder="TÌM KIẾM SẢN PHẨM"
+                className="text-xs p-0 outline-none border-0 focus:outline-none focus:ring-0 w-full"
+              />
+            </div>
+          </div>
+
+          {/* Biểu tượng Hỗ trợ */}
+          <div className="hidden md:block">
+            <Link to="/support">
+              <img
+                src="/images/earphones.png"
+                alt="Hỗ trợ"
+                className="w-5 h-auto"
+              />
+            </Link>
+          </div>
+
+          {/* Biểu tượng Người dùng */}
+          <div className="hidden md:block relative user-menu-container">
+            <img
+              src="/images/user.png"
+              alt="Người dùng"
+              className="w-5 h-auto cursor-pointer"
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            />
+            {isUserMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border shadow-lg z-50 py-2">
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      to="/account"
+                      className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    >
+                      Thông tin tài khoản
+                    </Link>
+                    {user.role === "3" && (
+                      <Link
+                        to="/admin"
+                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                      >
+                        Quản trị admin
+                      </Link>
+                    )}
+                    <Link
+                      to="/orders"
+                      className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    >
+                      Đơn hàng của tôi
+                    </Link>
+                    <Link
+                      to="/viewed-products"
+                      className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    >
+                      Sản phẩm đã xem
+                    </Link>
+                    <Link
+                      to="/favorites"
+                      className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    >
+                      Sản phẩm yêu thích
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      disabled={mutation.isPending}
+                      className={`block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 ${
+                        mutation.isPending
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
+                    >
+                      {mutation.isPending ? "Đang đăng xuất..." : "Đăng xuất"}
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                  >
+                    Đăng nhập
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Biểu tượng Giỏ hàng */}
           <div className="relative flex items-center justify-center cursor-pointer">
             <Link to="/cart">
               <img
                 src="/images/shopping-bag.png"
-                alt="Cart"
+                alt="Giỏ hàng"
                 className="w-7 h-auto"
               />
             </Link>
@@ -156,7 +268,7 @@ const MenuClient = () => {
           <div className="flex justify-between p-4">
             <img src="/images/logo.png" alt="Logo" className="w-24 h-auto" />
             <button onClick={() => setIsMenuOpen(false)}>
-              <img src="/images/close.png" alt="Close" className="w-6 h-6" />
+              <img src="/images/close.png" alt="Đóng" className="w-6 h-6" />
             </button>
           </div>
           <div className="p-4">
@@ -201,76 +313,6 @@ const MenuClient = () => {
               >
                 VỀ CHÚNG TÔI
               </Link>
-              {/* Biểu tượng hỗ trợ */}
-              <Link
-                to="/support"
-                className="block text-gray-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Hỗ trợ
-              </Link>
-              {/* Biểu tượng người dùng */}
-              {isAuthenticated ? (
-                <>
-                  <Link
-                    to="/account"
-                    className="block text-gray-800"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Thông tin tài khoản
-                  </Link>
-                  {user.role === "3" && (
-                    <Link
-                      to="/admin"
-                      className="block text-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Quản trị admin
-                    </Link>
-                  )}
-                  <Link
-                    to="/orders"
-                    className="block text-gray-800"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Đơn hàng của tôi
-                  </Link>
-                  <Link
-                    to="/viewed-products"
-                    className="block text-gray-800"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sản phẩm đã xem
-                  </Link>
-                  <Link
-                    to="/favorites"
-                    className="block text-gray-800"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sản phẩm yêu thích
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    disabled={mutation.isPending}
-                    className={`block w-full text-left text-red-600 ${
-                      mutation.isPending ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    {mutation.isPending ? "Đang đăng xuất..." : "Đăng xuất"}
-                  </button>
-                </>
-              ) : (
-                <Link
-                  to="/login"
-                  className="block text-gray-800"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Đăng nhập
-                </Link>
-              )}
             </div>
           </div>
         </div>

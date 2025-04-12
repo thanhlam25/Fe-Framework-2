@@ -3,7 +3,6 @@ export interface CartItem {
   size: string;
   quantity: number;
   userId: string;
-  productId?: string;
 }
 export interface AddToCartItem {
   productId: string;
