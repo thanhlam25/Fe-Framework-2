@@ -13,15 +13,75 @@ import Loading from "../../components/loading";
 import axiosInstance from "../../services/axiosInstance";
 import moment from "moment";
 import { useGHNMapper } from "../../utils/ghnMapping";
-// import findGHNProvinceId from "../../utils/ghnMapping";
-// import {findGHNDistrictId} from "../../utils/ghnMapping";
-// import {findGHNWardCode} from "../../utils/ghnMapping";
 
 const Dathang = () => {
   const queryClient = useQueryClient();
   const { auth } = useAuth();
   const [showProducts, setShowProducts] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState("cod");
+
+  // const cityName = userData[0].city.name;
+  // const districtName = userData[0].district.name;
+  // const wardName = userData[0].commune.name;
+  const cityName = "Hà Nội";
+  const districtName = "Quận Nam Từ Liêm";
+  const wardName = "Phường Xuân Phương";
+
+  const {
+    provinces,
+    districts,
+    wards,
+    fetchDistricts,
+    fetchWards,
+    findProvinceId,
+    findDistrictId,
+    findWardCode,
+  } = useGHNMapper("5191a6d2-16d1-11f0-8b10-8e771ee3638b");
+
+  // 1. Khi provinces đã load, tìm provinceId và fetch district
+  useEffect(() => {
+    if (provinces.length === 0) return;
+
+    const provinceId = findProvinceId(cityName);
+    if (provinceId) {
+      console.log("✅ Province ID:", provinceId);
+      fetchDistricts(provinceId);
+    } else {
+      console.warn("❌ Không tìm thấy province");
+    }
+  }, [provinces]);
+
+  // 2. Khi districts đã load, tìm districtId và fetch ward
+  useEffect(() => {
+    if (districts.length === 0 || provinces.length === 0) return;
+
+    const provinceId = findProvinceId(cityName);
+    if (!provinceId) return;
+
+    const districtId = findDistrictId(districtName, provinceId);
+    if (districtId) {
+      console.log("✅ District ID:", districtId);
+      fetchWards(districtId);
+    } else {
+      console.warn("❌ Không tìm thấy district");
+    }
+  }, [districts]);
+
+  // 3. Khi wards đã load, tìm wardCode
+  useEffect(() => {
+    if (wards.length === 0 || districts.length === 0) return;
+
+    const provinceId = findProvinceId(cityName);
+    const districtId = findDistrictId(districtName, provinceId!);
+    if (!districtId) return;
+
+    const wardCode = findWardCode(wardName, districtId);
+    if (wardCode) {
+      console.log("✅ Ward Code:", wardCode);
+    } else {
+      console.warn("❌ Không tìm thấy ward");
+    }
+  }, [wards]);
 
   const {
     data: cartItems,
@@ -32,7 +92,6 @@ const Dathang = () => {
     queryFn: async () => getList({ namespace: `cart` }),
     staleTime: 60 * 1000,
   });
-  const navigate = useNavigate();
   const {
     data: userData,
     isLoading: userLoading,
@@ -276,74 +335,6 @@ const Dathang = () => {
     }
   };
 
-
-
-
-
-
-
-
-
-  const {
-    provinces,
-    districts,
-    wards,
-    fetchDistricts,
-    fetchWards,
-    findProvinceId,
-    findDistrictId,
-    findWardCode
-  } = useGHNMapper("5191a6d2-16d1-11f0-8b10-8e771ee3638b"); // thay token bằng token thực
-
-  const cityName = "Hà Nội";
-  const districtName = "Ba Đình";
-  const wardName = "Phúc Xá";
-
-  useEffect(() => {
-    // 1. Tìm ProvinceID từ cityName
-    const provinceId = findProvinceId(cityName);
-    if (!provinceId) return;
-
-    // 2. Gọi API lấy quận
-    fetchDistricts(provinceId);
-
-    // Khi district có dữ liệu:
-    const timeout1 = setTimeout(() => {
-      const districtId = findDistrictId(districtName, provinceId);
-      if (!districtId) return;
-
-      // 3. Gọi API lấy phường
-      fetchWards(districtId);
-
-      // Khi ward có dữ liệu:
-      const timeout2 = setTimeout(() => {
-        const wardCode = findWardCode(wardName, districtId);
-
-        // ✅ In ra kết quả cuối cùng
-        console.log({ provinceId, districtId, wardCode });
-      }, 500); // chờ ward về
-
-    }, 500); // chờ district về
-
-    return () => {
-      clearTimeout(timeout1);
-    };
-  }, [provinces]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <>
       <HeaderClient />
@@ -518,8 +509,8 @@ const Dathang = () => {
                                 >
                                   <img
                                     src={
-                                      item?.productVariantId?.images?.main?.url ||
-                                      "/fallback.jpg"
+                                      item?.productVariantId?.images?.main
+                                        ?.url || "/fallback.jpg"
                                     }
                                     alt={
                                       item?.productVariantId?.productId?.name ||
